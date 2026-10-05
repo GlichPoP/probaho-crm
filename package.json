@@ -45,6 +45,7 @@
       ]
     },
     "nsis": {
+      "artifactName": "PROBAHO.CRM.Solutions.Setup.${version}.${ext}",
       "oneClick": false,
       "perMachine": false,
       "allowElevation": true,
@@ -57,7 +58,7 @@
       "runAfterFinish": true
     },
     "portable": {
-      "artifactName": "${productName}-Portable.${ext}"
+      "artifactName": "PROBAHO.CRM.Solutions-Portable.${ext}"
     }
   },
   "dependencies": {
