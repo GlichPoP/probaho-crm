@@ -1,28 +1,37 @@
-<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
+    <!-- Base Royal Tech Gradient (Indigo to Purple) -->
     <linearGradient id="probaho-bg" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stopColor="#6366F1" />
-      <stop offset="50%" stopColor="#8B5CF6" />
-      <stop offset="100%" stopColor="#4F46E5" />
+      <stop offset="0%" stop-color="#6366F1" style="stop-color: #6366F1;" />
+      <stop offset="50%" stop-color="#8B5CF6" style="stop-color: #8B5CF6;" />
+      <stop offset="100%" stop-color="#4F46E5" style="stop-color: #4F46E5;" />
     </linearGradient>
+
+    <!-- Flow Stream Accent Gradient (Cyan to Purple) -->
     <linearGradient id="probaho-accent" x1="20" y1="20" x2="85" y2="85" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stopColor="#38BDF8" />
-      <stop offset="45%" stopColor="#818CF8" />
-      <stop offset="100%" stopColor="#C084FC" />
+      <stop offset="0%" stop-color="#38BDF8" style="stop-color: #38BDF8;" />
+      <stop offset="45%" stop-color="#818CF8" style="stop-color: #818CF8;" />
+      <stop offset="100%" stop-color="#C084FC" style="stop-color: #C084FC;" />
     </linearGradient>
+
+    <!-- Glass Specular Highlight -->
     <linearGradient id="probaho-glass" x1="25" y1="15" x2="75" y2="60" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
-      <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85" style="stop-color: #FFFFFF; stop-opacity: 0.85;" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" style="stop-color: #FFFFFF; stop-opacity: 0;" />
     </linearGradient>
+
+    <!-- Drop Shadow Filter -->
     <filter id="probaho-shadow" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#1E1B4B" floodOpacity="0.4" />
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1E1B4B" flood-opacity="0.4" />
     </filter>
   </defs>
 
+  <!-- Squircle Base -->
   <rect x="4" y="4" width="92" height="92" rx="26" fill="url(#probaho-bg)" />
   <rect x="5" y="5" width="90" height="90" rx="25" stroke="url(#probaho-glass)" stroke-width="1.5" fill="none" opacity="0.65" />
   <path d="M20 78C32 84 68 84 80 72" stroke="rgba(255, 255, 255, 0.18)" stroke-width="3" stroke-linecap="round" />
 
+  <!-- Monogram P Ribbon -->
   <g filter="url(#probaho-shadow)">
     <path d="M30 24C30 21.79 31.79 20 34 20H40C42.21 20 44 21.79 44 24V74C44 76.21 42.21 78 40 78H34C31.79 78 30 76.21 30 74V24Z" fill="#FFFFFF" fill-opacity="0.95" />
     <path d="M40 20H55C68.8 20 80 30.5 80 43.5C80 56.5 68.8 67 55 67H42" stroke="url(#probaho-accent)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />

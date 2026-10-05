@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crown, Check, X, Shield, ArrowRight, KeyRound } from 'lucide-react';
+import { Crown, Check, X, Shield, ArrowRight, KeyRound, Lock } from 'lucide-react';
 import type { UserAccount } from '../../types/crm';
 import { dbService } from '../../database/db';
 
@@ -9,6 +9,7 @@ interface ProfileSwitcherModalProps {
   onSelectUser: (userId: string) => void;
   onOpenStaffSettings: () => void;
   onOpenAuthModal?: () => void;
+  onLockSession?: () => void;
 }
 
 export const ProfileSwitcherModal: React.FC<ProfileSwitcherModalProps> = ({
@@ -16,7 +17,8 @@ export const ProfileSwitcherModal: React.FC<ProfileSwitcherModalProps> = ({
   onClose,
   onSelectUser,
   onOpenStaffSettings,
-  onOpenAuthModal
+  onOpenAuthModal,
+  onLockSession
 }) => {
   const allUsers = dbService.getUserAccounts();
   const masters = allUsers.filter(u => u.role === 'master');
@@ -248,6 +250,31 @@ export const ProfileSwitcherModal: React.FC<ProfileSwitcherModalProps> = ({
             >
               <KeyRound size={15} />
               <span>Sign In with PIN / Switch Company Workspace</span>
+            </button>
+          )}
+
+          {onLockSession && (
+            <button
+              onClick={() => { onClose(); onLockSession(); }}
+              style={{
+                padding: '9px 18px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                border: '1px solid rgba(239, 68, 68, 0.28)',
+                color: '#EF4444',
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                width: '100%',
+                justifyContent: 'center'
+              }}
+              className="hover-lift"
+            >
+              <Lock size={15} />
+              <span>Lock CRM Terminal / Log Out</span>
             </button>
           )}
         </div>

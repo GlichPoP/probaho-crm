@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, Moon, Sun, DollarSign, Package, Truck, PanelLeft, Cloud } from 'lucide-react';
+import { Search, Plus, Moon, Sun, DollarSign, Package, Truck, PanelLeft, Cloud, Lock } from 'lucide-react';
 import type { UserAccount, SyncStatus } from '../../types/crm';
 import { firebaseSync } from '../../services/firebaseSync';
 import { LanguageDropdown } from './LanguageDropdown';
@@ -19,6 +19,7 @@ interface HeaderProps {
   onOpenCloudSettings?: () => void;
   isSidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
+  onLockSession?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -34,7 +35,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenProfileSwitcher,
   onOpenCloudSettings,
   isSidebarCollapsed,
-  onToggleSidebar
+  onToggleSidebar,
+  onLockSession
 }) => {
   const { t, currencySymbol } = useLocalization();
   const [cloudStatus, setCloudStatus] = useState<SyncStatus>(() => firebaseSync.getStatus());
@@ -270,6 +272,30 @@ export const Header: React.FC<HeaderProps> = ({
                   {currentUser.role === 'master' ? 'Master Profile' : 'Employee'}
                 </div>
               </div>
+            </button>
+          )}
+
+          {/* Quick Lock Session Button */}
+          {onLockSession && (
+            <button
+              onClick={onLockSession}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '38px',
+                height: '38px',
+                borderRadius: '10px',
+                backgroundColor: 'var(--bg-primary)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                transition: 'all 0.18s ease'
+              }}
+              className="hover-lift"
+              title="Lock CRM Terminal & Return to Login Screen"
+            >
+              <Lock size={16} />
             </button>
           )}
         </div>

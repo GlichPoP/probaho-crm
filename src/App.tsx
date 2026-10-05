@@ -19,6 +19,7 @@ import { PartnersView } from './components/partners/PartnersView';
 import { SettingsView, type ThemeMode, type SettingsSubTab } from './components/settings/SettingsView';
 import { OnboardingWizardModal } from './components/onboarding/OnboardingWizardModal';
 import { AuthModal } from './components/auth/AuthModal';
+import { LoginScreen } from './components/auth/LoginScreen';
 import { AboutModal } from './components/layout/AboutModal';
 import { UpdateNotificationToast } from './components/layout/UpdateNotificationToast';
 
@@ -30,6 +31,17 @@ export function App() {
   const [isCommandOpen, setIsCommandOpen] = useState<boolean>(false);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(() => !dbService.isOnboarded());
   const [currentUser, setCurrentUser] = useState<UserAccount>(() => dbService.getCurrentUser());
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    // Check if keep-me-logged-in session is active
+    const keepLoggedIn = localStorage.getItem('PROBAHO_KEEP_LOGGED_IN') === 'true';
+    const savedUserId = localStorage.getItem('PROBAHO_AUTH_SESSION');
+    if (keepLoggedIn && savedUserId) {
+      const accounts = dbService.getUserAccounts();
+      const exists = accounts.find(a => a.id === savedUserId && a.is_active !== false);
+      if (exists) return true;
+    }
+    return false;
+  });
   const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState<boolean>(false);
   const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false);
   const [isAuthOpen, setIsAuthOpen] = useState<boolean>(() => {
@@ -282,6 +294,32 @@ export function App() {
     }
   };
 
+  const handleLoginSuccess = (user: UserAccount, keepLoggedIn: boolean) => {
+    dbService.setCurrentUser(user.id);
+    setCurrentUser(user);
+    localStorage.setItem('PROBAHO_AUTH_SESSION', user.id);
+    localStorage.setItem('PROBAHO_KEEP_LOGGED_IN', String(keepLoggedIn));
+    setIsAuthenticated(true);
+    refreshData();
+  };
+
+  const handleLockSession = () => {
+    localStorage.removeItem('PROBAHO_AUTH_SESSION');
+    localStorage.setItem('PROBAHO_KEEP_LOGGED_IN', 'false');
+    setIsAuthenticated(false);
+    setIsProfileSwitcherOpen(false);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <LoginScreen
+        onLoginSuccess={handleLoginSuccess}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
+      />
+    );
+  }
+
   return (
     <div style={{ display: 'flex', width: '100vw', height: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)', overflow: 'hidden' }}>
       {/* Sidebar Navigation */}
@@ -318,6 +356,7 @@ export function App() {
           onOpenCloudSettings={handleOpenCloudSettings}
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleSidebar={() => setIsSidebarCollapsed(prev => !prev)}
+          onLockSession={handleLockSession}
         />
 
         {/* Dynamic View Route */}
@@ -500,6 +539,7 @@ export function App() {
             setActiveTab('settings');
           }}
           onOpenAuthModal={() => setIsAuthOpen(true)}
+          onLockSession={handleLockSession}
         />
       )}
 

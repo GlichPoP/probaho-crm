@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="src/assets/probaho-logo.svg" width="120" height="120" alt="PROBAHO CRM Solutions Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);" />
+<img src="build/icon.png" width="120" height="120" alt="PROBAHO CRM Solutions Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);" />
 
 # PROBAHO CRM Solutions
 ### Enterprise Business Operations & Showroom Management Suite

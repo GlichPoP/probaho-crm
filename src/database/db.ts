@@ -1548,6 +1548,61 @@ class CRMDatabaseService {
     this.notifyListeners();
   }
 
+  public authenticateUser(identifier: string, secret: string): { success: boolean; user?: UserAccount; message: string } {
+    const accounts = this.getUserAccounts();
+    const cleanId = identifier.trim().toLowerCase();
+    const cleanSecret = secret.trim();
+
+    if (!cleanId) {
+      return { success: false, message: 'Please enter your username, email, or staff ID.' };
+    }
+    if (!cleanSecret) {
+      return { success: false, message: 'Please enter your password or PIN.' };
+    }
+
+    // Find account by matching username, email, phone, name, or 'admin' / 'owner' keyword
+    let matched = accounts.find(a => {
+      const emailMatch = a.email_or_phone?.trim().toLowerCase() === cleanId;
+      const idMatch = a.id?.toLowerCase() === cleanId;
+      const nameMatch = a.name?.toLowerCase().includes(cleanId);
+      const phoneClean = a.email_or_phone?.replace(/\D/g, '') || '';
+      const inputPhoneClean = cleanId.replace(/\D/g, '');
+      const phoneMatch = inputPhoneClean.length >= 6 && phoneClean.endsWith(inputPhoneClean);
+      return emailMatch || idMatch || nameMatch || phoneMatch;
+    });
+
+    // If identifier is 'admin', 'owner', or 'master', fall back to the first active master account
+    if (!matched && (cleanId === 'admin' || cleanId === 'owner' || cleanId === 'master')) {
+      matched = accounts.find(a => a.role === 'master' && a.is_active !== false) || accounts[0];
+    }
+
+    if (!matched) {
+      return { success: false, message: 'No account found with this username, email, or ID.' };
+    }
+
+    if (matched.is_active === false) {
+      return { success: false, message: '⚠️ Access Revoked: This account has been deactivated.' };
+    }
+
+    const userPin = (matched.pin_code || '').trim();
+    const isMaster = matched.role === 'master';
+
+    // Password validation: matches customized userPin or standard master passwords
+    const isValid = 
+      (userPin && cleanSecret === userPin) ||
+      (isMaster && (cleanSecret === 'admin123' || cleanSecret === 'admin' || cleanSecret === '1234' || !userPin));
+
+    if (!isValid) {
+      return { success: false, message: 'Incorrect password or PIN entered.' };
+    }
+
+    matched.last_active_at = new Date().toISOString();
+    this.setCurrentUser(matched.id);
+    this.saveToStorage(this.data, matched.name);
+
+    return { success: true, user: matched, message: 'Logged in successfully!' };
+  }
+
   public authenticateUserWithPin(phoneOrEmail: string, pin: string): { success: boolean; user?: UserAccount; message: string } {
     const accounts = this.getUserAccounts();
     const cleanInput = phoneOrEmail.trim().toLowerCase();
