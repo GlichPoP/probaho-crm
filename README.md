@@ -129,7 +129,7 @@ Compiled executables will be output directly to the `release/` directory.
 Conceived, architected, and engineered by:
 
 **Irfanur Rahman**  
-* Creator & Product Architect | Finance Graduate & Tech Enthusiast  
+* Creator & Product Architect | Product Builder  
 * **LinkedIn**: [linkedin.com/in/irfanur-rahman123](https://www.linkedin.com/in/irfanur-rahman123/)  
 * **GitHub**: [@GlichPoP](https://github.com/GlichPoP)  
 * **Contact Email**: [irfanur6@gmail.com](mailto:irfanur6@gmail.com)
