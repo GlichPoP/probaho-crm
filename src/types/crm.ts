@@ -168,9 +168,13 @@ export type UserRole = 'master' | 'employee';
 export interface UserAccount {
   id: string;
   name: string;
+  username?: string;
   email_or_phone: string;
   role: UserRole;
+  password?: string;
   pin_code?: string;
+  designation?: string;
+  must_change_password?: boolean;
   allowed_tabs: string[]; // e.g. ['dashboard', 'orders', 'challan', 'inventory', 'customers', 'finance', 'vendors', 'settings', 'staff']
   is_active?: boolean; // Kill switch: false = blocked/revoked
   last_active_at?: string;
@@ -201,6 +205,7 @@ export interface PaymentPartner {
 
 export interface CRMDataStore {
   is_onboarded?: boolean;
+  is_master_configured?: boolean;
   workspace_id?: string; // Unique Company Code (e.g. URBAN-101)
   last_synced_at?: string;
   products: Product[];

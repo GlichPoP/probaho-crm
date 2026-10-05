@@ -4,6 +4,7 @@ import type {
   BusinessType
 } from '../types/crm';
 import { firebaseSync } from '../services/firebaseSync';
+import { validateMasterPassword, validateStaffPassword } from '../utils/security';
 
 const STORAGE_KEY = 'VASTRA_CRM_LOCAL_STORE_V1';
 
@@ -638,6 +639,7 @@ export function generateDemoSeedData(): CRMDataStore {
 export function createCleanInitialDataStore(): CRMDataStore {
   return {
     is_onboarded: false,
+    is_master_configured: false,
     products: [],
     customers: [],
     orders: [],
@@ -798,6 +800,7 @@ class CRMDatabaseService {
         ? parsed.payment_partners
         : clean.payment_partners,
       is_onboarded: parsed.is_onboarded ?? false,
+      is_master_configured: parsed.is_master_configured ?? false,
       workspace_id: parsed.workspace_id || clean.workspace_id,
       last_synced_at: parsed.last_synced_at
     };
@@ -1548,7 +1551,158 @@ class CRMDatabaseService {
     this.notifyListeners();
   }
 
-  public authenticateUser(identifier: string, secret: string): { success: boolean; user?: UserAccount; message: string } {
+  public isMasterConfigured(): boolean {
+    if (this.data.is_master_configured === true) return true;
+    const masters = (this.data.user_accounts || []).filter(u => u.role === 'master' && u.is_active !== false);
+    const hasPassword = masters.some(m => (m.password && m.password.trim() !== '') || (m.pin_code && m.pin_code.trim() !== ''));
+    if (hasPassword) {
+      this.data.is_master_configured = true;
+      return true;
+    }
+    return false;
+  }
+
+  public initializeMasterAccount(params: {
+    username: string;
+    name: string;
+    password: string;
+    businessName?: string;
+  }): { success: boolean; user?: UserAccount; message: string } {
+    const cleanUsername = params.username.trim().toLowerCase();
+    if (cleanUsername.length < 3) {
+      return { success: false, message: 'Master ID / Username must be at least 3 characters long.' };
+    }
+
+    const val = validateMasterPassword(params.password);
+    if (!val.isValid) {
+      return { 
+        success: false, 
+        message: val.errors.join('. ') || 'Master password does not satisfy strong security requirements.' 
+      };
+    }
+
+    const accounts = [...this.getUserAccounts()];
+    let master = accounts.find(a => a.role === 'master');
+    const allTabs = ['dashboard', 'orders', 'challan', 'inventory', 'customers', 'finance', 'vendors', 'partners', 'settings', 'staff'];
+
+    if (master) {
+      master.username = cleanUsername;
+      master.name = params.name.trim() || master.name;
+      master.password = params.password;
+      master.pin_code = params.password;
+      master.is_active = true;
+      master.allowed_tabs = allTabs;
+      master.last_active_at = new Date().toISOString();
+    } else {
+      master = {
+        id: `user-master-${Date.now()}`,
+        username: cleanUsername,
+        name: params.name.trim() || 'Master Administrator',
+        email_or_phone: cleanUsername.includes('@') ? cleanUsername : `${cleanUsername}@probaho.local`,
+        role: 'master',
+        password: params.password,
+        pin_code: params.password,
+        allowed_tabs: allTabs,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        last_active_at: new Date().toISOString()
+      };
+      accounts.unshift(master);
+    }
+
+    this.data.user_accounts = accounts;
+    this.data.is_master_configured = true;
+
+    if (params.businessName?.trim()) {
+      if (!this.data.brand_profile) {
+        this.data.brand_profile = {
+          brand_name: params.businessName.trim(),
+          business_type: 'clothing',
+          country: 'BD',
+          language: 'en',
+          phone: '',
+          address: '',
+          vat_bin: '',
+          tax_title: 'VAT / Tax',
+          default_courier: 'Pathao Courier',
+          rto_threshold: 2,
+          currency: 'BDT (৳)'
+        };
+      } else {
+        this.data.brand_profile.brand_name = params.businessName.trim();
+      }
+    }
+
+    this.setCurrentUser(master.id);
+    this.logActivity('System', `Initialized Master Administrator account [${master.name}] (@${cleanUsername})`, master.name);
+    this.saveToStorage(this.data, master.name);
+
+    return { success: true, user: master, message: 'Master Administrator account established successfully!' };
+  }
+
+  public updateUserPassword(userId: string, currentSecret: string, newSecret: string): { success: boolean; message: string } {
+    const accounts = [...this.getUserAccounts()];
+    const user = accounts.find(a => a.id === userId);
+    if (!user) return { success: false, message: 'User account not found.' };
+
+    const storedPass = user.password || user.pin_code || '';
+    const isMaster = user.role === 'master';
+    const matchesCurrent = 
+      (storedPass && currentSecret.trim() === storedPass) ||
+      (!storedPass && isMaster && (currentSecret.trim() === 'admin123' || currentSecret.trim() === 'admin' || currentSecret.trim() === '1234'));
+
+    if (!matchesCurrent) {
+      return { success: false, message: 'Current password does not match.' };
+    }
+
+    if (isMaster) {
+      const val = validateMasterPassword(newSecret);
+      if (!val.isValid) {
+        return { success: false, message: val.errors.join('. ') || 'New Master password must meet the security standards (8+ chars, upper, lower, number, special char).' };
+      }
+    } else {
+      const val = validateStaffPassword(newSecret);
+      if (!val.isValid) {
+        return { success: false, message: val.message || 'Staff password must be at least 4 characters long.' };
+      }
+    }
+
+    user.password = newSecret.trim();
+    user.pin_code = newSecret.trim();
+    user.must_change_password = false;
+    this.data.user_accounts = accounts;
+    this.logActivity('System', `Updated password for profile [${user.name}]`, user.name);
+    this.saveToStorage(this.data, user.name);
+
+    return { success: true, message: 'Password updated successfully!' };
+  }
+
+  public resetStaffPasswordByMaster(staffId: string, newSecret: string, requireChangeOnLogin: boolean = false, performedBy: string = 'Master Admin'): { success: boolean; message: string } {
+    const accounts = [...this.getUserAccounts()];
+    const staff = accounts.find(a => a.id === staffId);
+    if (!staff) return { success: false, message: 'Staff profile not found.' };
+
+    const cleanPass = newSecret.trim();
+    if (cleanPass.length < 3) {
+      return { success: false, message: 'Staff password must be at least 3 characters long.' };
+    }
+
+    staff.password = cleanPass;
+    staff.pin_code = cleanPass;
+    staff.must_change_password = requireChangeOnLogin;
+    this.data.user_accounts = accounts;
+    this.logActivity('System', `Master reset password for staff member [${staff.name}]`, performedBy);
+    this.saveToStorage(this.data, performedBy);
+
+    return { success: true, message: `Password for ${staff.name} has been reset!` };
+  }
+
+  public authenticateUser(identifier: string, secret: string): { 
+    success: boolean; 
+    user?: UserAccount; 
+    message: string;
+    must_change_password?: boolean;
+  } {
     const accounts = this.getUserAccounts();
     const cleanId = identifier.trim().toLowerCase();
     const cleanSecret = secret.trim();
@@ -1560,15 +1714,16 @@ class CRMDatabaseService {
       return { success: false, message: 'Please enter your password or PIN.' };
     }
 
-    // Find account by matching username, email, phone, name, or 'admin' / 'owner' keyword
+    // Find account by matching username, email, phone, name, or ID
     let matched = accounts.find(a => {
+      const usernameMatch = a.username?.trim().toLowerCase() === cleanId;
       const emailMatch = a.email_or_phone?.trim().toLowerCase() === cleanId;
       const idMatch = a.id?.toLowerCase() === cleanId;
       const nameMatch = a.name?.toLowerCase().includes(cleanId);
       const phoneClean = a.email_or_phone?.replace(/\D/g, '') || '';
       const inputPhoneClean = cleanId.replace(/\D/g, '');
       const phoneMatch = inputPhoneClean.length >= 6 && phoneClean.endsWith(inputPhoneClean);
-      return emailMatch || idMatch || nameMatch || phoneMatch;
+      return usernameMatch || emailMatch || idMatch || nameMatch || phoneMatch;
     });
 
     // If identifier is 'admin', 'owner', or 'master', fall back to the first active master account
@@ -1577,20 +1732,20 @@ class CRMDatabaseService {
     }
 
     if (!matched) {
-      return { success: false, message: 'No account found with this username, email, or ID.' };
+      return { success: false, message: 'No account found with this username, email, or staff ID.' };
     }
 
     if (matched.is_active === false) {
-      return { success: false, message: '⚠️ Access Revoked: This account has been deactivated.' };
+      return { success: false, message: '⚠️ Access Revoked: This account has been deactivated by the Master.' };
     }
 
-    const userPin = (matched.pin_code || '').trim();
+    const storedPass = (matched.password || matched.pin_code || '').trim();
     const isMaster = matched.role === 'master';
 
-    // Password validation: matches customized userPin or standard master passwords
+    // Password validation: matches stored password/PIN, or legacy initial fallback
     const isValid = 
-      (userPin && cleanSecret === userPin) ||
-      (isMaster && (cleanSecret === 'admin123' || cleanSecret === 'admin' || cleanSecret === '1234' || !userPin));
+      (storedPass && cleanSecret === storedPass) ||
+      (!storedPass && isMaster && (cleanSecret === 'admin123' || cleanSecret === 'admin' || cleanSecret === '1234'));
 
     if (!isValid) {
       return { success: false, message: 'Incorrect password or PIN entered.' };
@@ -1600,7 +1755,12 @@ class CRMDatabaseService {
     this.setCurrentUser(matched.id);
     this.saveToStorage(this.data, matched.name);
 
-    return { success: true, user: matched, message: 'Logged in successfully!' };
+    return { 
+      success: true, 
+      user: matched, 
+      message: 'Logged in successfully!',
+      must_change_password: matched.must_change_password === true
+    };
   }
 
   public authenticateUserWithPin(phoneOrEmail: string, pin: string): { success: boolean; user?: UserAccount; message: string } {

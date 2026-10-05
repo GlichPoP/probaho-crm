@@ -33,15 +33,21 @@ export const StaffManagementView: React.FC<StaffManagementViewProps> = ({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newRole, setNewRole] = useState<UserRole>('employee');
   const [newName, setNewName] = useState('');
+  const [newUsername, setNewUsername] = useState('');
   const [newEmailOrPhone, setNewEmailOrPhone] = useState('');
+  const [newDesignation, setNewDesignation] = useState('');
   const [newPin, setNewPin] = useState('');
+  const [newMustChangePassword, setNewMustChangePassword] = useState(false);
   const [selectedTabs, setSelectedTabs] = useState<string[]>(['orders', 'challan', 'customers']);
 
   // Edit employee modal state
   const [editingEmployee, setEditingEmployee] = useState<UserAccount | null>(null);
   const [editName, setEditName] = useState('');
+  const [editUsername, setEditUsername] = useState('');
   const [editEmailOrPhone, setEditEmailOrPhone] = useState('');
+  const [editDesignation, setEditDesignation] = useState('');
   const [editPin, setEditPin] = useState('');
+  const [editMustChangePassword, setEditMustChangePassword] = useState<boolean>(false);
   const [editIsActive, setEditIsActive] = useState<boolean>(true);
   const [editAllowedTabs, setEditAllowedTabs] = useState<string[]>([]);
 
@@ -61,18 +67,19 @@ export const StaffManagementView: React.FC<StaffManagementViewProps> = ({
   const getEmployeeDirectLink = (emp: UserAccount) => {
     const workspace = dbService.getWorkspaceId() || 'MAIN';
     const base = customWebBaseUrl.trim().replace(/\/+$/, '');
-    return `${base}/?code=${encodeURIComponent(workspace)}&user=${encodeURIComponent(emp.email_or_phone)}`;
+    const userParam = emp.username || emp.email_or_phone;
+    return `${base}/?code=${encodeURIComponent(workspace)}&user=${encodeURIComponent(userParam)}`;
   };
 
   const getEmployeeWhatsAppMessage = (emp: UserAccount) => {
     const workspace = dbService.getWorkspaceId() || 'MAIN';
     const link = getEmployeeDirectLink(emp);
-    const brand = dbService.getBrandProfile()?.brand_name || 'Our Company CRM';
+    const brand = dbService.getBrandProfile()?.brand_name || 'PROBAHO CRM';
     const allowedModuleNames = (emp.allowed_tabs || [])
       .map(tabId => ALL_CRM_MODULES.find(m => m.id === tabId)?.label || tabId)
-      .join(', ') || 'Standard modules';
+      .join(', ') || 'Showroom POS & Orders';
 
-    return `👋 Hello ${emp.name},\n\nHere is your official access link for *${brand}*:\n\n🔗 *Direct Login Link:* ${link}\n🏢 *Workspace Code:* ${workspace}\n👤 *Login User / Phone:* ${emp.email_or_phone}\n🔑 *Your Secret Login PIN:* ${emp.pin_code || '1234'}\n📋 *Allowed Modules:* ${allowedModuleNames}\n\n👉 *How to login:* Click the link above on Chrome or Edge on any computer or phone to start working immediately!`;
+    return `👋 Hello ${emp.name},\n\nYour official staff account for *${brand}* is ready:\n\n👤 *Staff Login ID:* ${emp.username || emp.email_or_phone}\n🔑 *Initial Password / PIN:* ${emp.password || emp.pin_code || '1234'}\n🏢 *Showroom Workspace:* ${workspace}\n📋 *Assigned Modules:* ${allowedModuleNames}\n\n💻 *How to Access:*\n1. Launch the *PROBAHO CRM* software (Setup or Portable edition on your computer) or visit: ${link}\n2. Enter your Staff Login ID and Initial Password to sign in.\n3. You can change your password anytime by clicking your profile in the top bar!`;
   };
 
   const handleCopyDirectLink = (emp: UserAccount) => {
@@ -92,28 +99,27 @@ export const StaffManagementView: React.FC<StaffManagementViewProps> = ({
   const getEmployeeEmailMessage = (emp: UserAccount) => {
     const workspace = dbService.getWorkspaceId() || 'MAIN';
     const link = getEmployeeDirectLink(emp);
-    const brand = dbService.getBrandProfile()?.brand_name || 'Our Company CRM';
+    const brand = dbService.getBrandProfile()?.brand_name || 'PROBAHO CRM';
     const allowedModuleNames = (emp.allowed_tabs || [])
       .map(tabId => ALL_CRM_MODULES.find(m => m.id === tabId)?.label || tabId)
-      .join(', ') || 'Standard modules';
+      .join(', ') || 'Showroom POS & Orders';
 
     return `Hello ${emp.name},
 
 Your staff account for ${brand} has been configured with the following credentials:
 
-• Direct Login Link: ${link}
-• Company Workspace Code: ${workspace}
-• Login User / Email / Phone: ${emp.email_or_phone}
-• Secret Login PIN: ${emp.pin_code || '1234'}
+• Staff Login ID / Username: ${emp.username || emp.email_or_phone}
+• Initial Password / PIN: ${emp.password || emp.pin_code || '1234'}
+• Showroom Workspace Code: ${workspace}
 • Permitted Modules: ${allowedModuleNames}
 
 How to Access:
-1. Open the Direct Login Link above in Google Chrome or Microsoft Edge on any PC, laptop, or phone.
-2. Enter your secret 4-digit PIN.
-3. You will immediately access your assigned CRM workspace.
+1. Open PROBAHO CRM Desktop or Portable on your computer (or open: ${link}).
+2. Enter your Staff Login ID and Initial Password to sign in.
+3. You can personalize your password anytime from your profile settings in the top header.
 
 Best regards,
-${brand} Administration`;
+${brand} Master Administration`;
   };
 
   const handleSendEmail = (emp: UserAccount) => {
@@ -200,8 +206,11 @@ ${brand} Administration`;
   const openEditModal = (emp: UserAccount) => {
     setEditingEmployee(emp);
     setEditName(emp.name);
+    setEditUsername(emp.username || '');
     setEditEmailOrPhone(emp.email_or_phone);
-    setEditPin(emp.pin_code || '');
+    setEditDesignation(emp.designation || '');
+    setEditPin(emp.password || emp.pin_code || '');
+    setEditMustChangePassword(emp.must_change_password === true);
     setEditIsActive(emp.is_active !== false);
     setEditAllowedTabs([...(emp.allowed_tabs || [])]);
   };
@@ -217,8 +226,12 @@ ${brand} Administration`;
     const updated: UserAccount = {
       ...editingEmployee,
       name: editName.trim(),
+      username: editUsername.trim() || editingEmployee.username,
       email_or_phone: editEmailOrPhone.trim(),
-      pin_code: editPin.trim() || undefined,
+      designation: editDesignation.trim() || editingEmployee.designation,
+      password: editPin.trim() || editingEmployee.password,
+      pin_code: editPin.trim() || editingEmployee.pin_code,
+      must_change_password: editMustChangePassword,
       is_active: editIsActive,
       allowed_tabs: editAllowedTabs
     };
@@ -235,15 +248,24 @@ ${brand} Administration`;
       return;
     }
 
+    const rawUsername = newUsername.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const fallbackUsername = newEmailOrPhone.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const finalUsername = rawUsername || fallbackUsername || `staff_${Date.now().toString().slice(-4)}`;
+    const finalPassword = newPin.trim() || '1234';
+
     const newAccount: UserAccount = {
       id: `user-${newRole}-${Date.now()}`,
+      username: finalUsername,
       name: newName.trim(),
       email_or_phone: newEmailOrPhone.trim(),
       role: newRole,
-      pin_code: newPin.trim() || undefined,
+      password: finalPassword,
+      pin_code: finalPassword,
+      designation: newDesignation.trim() || (newRole === 'master' ? 'Master Administrator' : 'Showroom Associate'),
+      must_change_password: newRole === 'employee' ? newMustChangePassword : false,
       is_active: true,
       allowed_tabs: newRole === 'master' 
-        ? ['dashboard', 'orders', 'challan', 'inventory', 'customers', 'finance', 'vendors', 'settings', 'staff']
+        ? ['dashboard', 'orders', 'challan', 'inventory', 'customers', 'finance', 'vendors', 'partners', 'settings', 'staff']
         : selectedTabs,
       created_by: currentUser.name,
       created_at: new Date().toISOString()
@@ -253,8 +275,11 @@ ${brand} Administration`;
     refreshList();
     setIsCreateModalOpen(false);
     setNewName('');
+    setNewUsername('');
     setNewEmailOrPhone('');
+    setNewDesignation('');
     setNewPin('');
+    setNewMustChangePassword(false);
     setSelectedTabs(['orders', 'challan', 'customers']);
 
     // Immediately open the personalized access card for this new employee
@@ -447,6 +472,11 @@ ${brand} Administration`;
                         <div>
                           <div style={{ fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                             <span>{emp.name}</span>
+                            {emp.designation && (
+                              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                                ({emp.designation})
+                              </span>
+                            )}
                             {emp.id === currentUser.id && <span className="badge badge-primary" style={{ fontSize: '0.65rem' }}>Active Now</span>}
                             {emp.is_active === false ? (
                               <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '10px', backgroundColor: 'rgba(239, 68, 68, 0.2)', color: '#EF4444', fontWeight: 700 }}>
@@ -457,12 +487,21 @@ ${brand} Administration`;
                                 Active
                               </span>
                             )}
+                            {emp.must_change_password && (
+                              <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '10px', backgroundColor: 'rgba(245, 158, 11, 0.2)', color: '#F59E0B', fontWeight: 700 }}>
+                                Must Change Pass
+                              </span>
+                            )}
                           </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                            <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', fontFamily: 'monospace' }}>{emp.email_or_phone}</span>
-                            {emp.pin_code && (
-                              <span style={{ fontSize: '0.72rem', fontFamily: 'monospace', backgroundColor: 'var(--bg-hover)', border: '1px solid var(--border-color)', padding: '1px 5px', borderRadius: '4px', color: 'var(--text-main)' }}>
-                                PIN: {emp.pin_code}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', fontWeight: 600, fontFamily: 'monospace' }}>
+                              ID: @{emp.username || emp.email_or_phone}
+                            </span>
+                            <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)' }}>•</span>
+                            <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)', fontFamily: 'monospace' }}>{emp.email_or_phone}</span>
+                            {(emp.password || emp.pin_code) && (
+                              <span style={{ fontSize: '0.72rem', fontFamily: 'monospace', backgroundColor: 'var(--bg-hover)', border: '1px solid var(--border-color)', padding: '1px 6px', borderRadius: '4px', color: '#10B981', fontWeight: 700 }}>
+                                Pass: {emp.password || emp.pin_code}
                               </span>
                             )}
                           </div>
@@ -607,70 +646,146 @@ ${brand} Administration`;
               </button>
             </div>
 
-            <form onSubmit={handleCreateUser} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)' }}>Full Name / Designation</label>
-                <input
-                  type="text"
-                  placeholder={newRole === 'master' ? "e.g., Kazi Rahim (Managing Director)" : "e.g., Farhan (Warehouse Specialist)"}
-                  value={newName}
-                  onChange={e => setNewName(e.target.value)}
-                  style={{
-                    padding: '12px 14px',
-                    borderRadius: '10px',
-                    backgroundColor: 'var(--bg-hover)',
-                    border: '1px solid var(--border-color)',
-                    color: 'var(--text-main)',
-                    fontSize: '0.92rem'
-                  }}
-                  required
-                />
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)' }}>Email or Mobile Number</label>
-                <input
-                  type="text"
-                  placeholder="e.g., 01711-334455 or staff@probaho.com"
-                  value={newEmailOrPhone}
-                  onChange={e => setNewEmailOrPhone(e.target.value)}
-                  style={{
-                    padding: '12px 14px',
-                    borderRadius: '10px',
-                    backgroundColor: 'var(--bg-hover)',
-                    border: '1px solid var(--border-color)',
-                    color: 'var(--text-main)',
-                    fontSize: '0.92rem'
-                  }}
-                  required
-                />
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-                    Login PIN Code (4–6 Digits)
+            <form onSubmit={handleCreateUser} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Staff Full Name <span style={{ color: '#EF4444' }}>*</span>
                   </label>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>Staff login PIN</span>
+                  <input
+                    type="text"
+                    placeholder="e.g. Kashem Ahmed"
+                    value={newName}
+                    onChange={e => setNewName(e.target.value)}
+                    style={{
+                      padding: '11px 13px',
+                      borderRadius: '10px',
+                      backgroundColor: 'var(--bg-hover)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.9rem'
+                    }}
+                    required
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Staff Login ID / Username <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. kashem_pos or staff01"
+                    value={newUsername}
+                    onChange={e => setNewUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
+                    style={{
+                      padding: '11px 13px',
+                      borderRadius: '10px',
+                      backgroundColor: 'var(--bg-hover)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.9rem'
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Role / Showroom Designation
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Cashier / POS Staff"
+                    value={newDesignation}
+                    onChange={e => setNewDesignation(e.target.value)}
+                    style={{
+                      padding: '11px 13px',
+                      borderRadius: '10px',
+                      backgroundColor: 'var(--bg-hover)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.9rem'
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Email or Mobile Number <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 01711-223344 or staff@business.com"
+                    value={newEmailOrPhone}
+                    onChange={e => setNewEmailOrPhone(e.target.value)}
+                    style={{
+                      padding: '11px 13px',
+                      borderRadius: '10px',
+                      backgroundColor: 'var(--bg-hover)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.9rem'
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Initial Password or PIN (Set by Master) <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
+                    Staff can change this password after signing in
+                  </span>
                 </div>
                 <input
                   type="text"
-                  placeholder="e.g., 1234"
-                  maxLength={8}
+                  placeholder="e.g. 1234 or kashem2026"
                   value={newPin}
-                  onChange={e => setNewPin(e.target.value.replace(/\D/g, ''))}
+                  onChange={e => setNewPin(e.target.value)}
                   style={{
-                    padding: '12px 14px',
+                    padding: '11px 13px',
                     borderRadius: '10px',
                     backgroundColor: 'var(--bg-hover)',
                     border: '1px solid var(--border-color)',
                     color: 'var(--text-main)',
-                    fontSize: '0.92rem',
-                    letterSpacing: '2px',
+                    fontSize: '0.9rem',
                     fontFamily: 'monospace'
                   }}
+                  required
                 />
               </div>
+
+              {newRole === 'employee' && (
+                <div
+                  onClick={() => setNewMustChangePassword(!newMustChangePassword)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: 'var(--bg-hover)',
+                    cursor: 'pointer',
+                    userSelect: 'none'
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={newMustChangePassword}
+                    onChange={() => {}}
+                    style={{ accentColor: '#6366F1', width: '16px', height: '16px' }}
+                  />
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-main)' }}>
+                    Require staff to change password upon first login
+                  </span>
+                </div>
+              )}
 
               {newRole === 'employee' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
@@ -753,38 +868,42 @@ ${brand} Administration`;
               </button>
             </div>
 
-            <form onSubmit={handleSaveEditEmployee} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <form onSubmit={handleSaveEditEmployee} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)' }}>Employee Name / Title</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Staff Full Name <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
                   <input
                     type="text"
                     value={editName}
                     onChange={e => setEditName(e.target.value)}
                     style={{
-                      padding: '12px 14px',
+                      padding: '11px 13px',
                       borderRadius: '10px',
                       backgroundColor: 'var(--bg-hover)',
                       border: '1px solid var(--border-color)',
                       color: 'var(--text-main)',
-                      fontSize: '0.92rem'
+                      fontSize: '0.9rem'
                     }}
                     required
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)' }}>Email or Mobile Number</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Staff Login ID / Username <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
                   <input
                     type="text"
-                    value={editEmailOrPhone}
-                    onChange={e => setEditEmailOrPhone(e.target.value)}
+                    value={editUsername}
+                    onChange={e => setEditUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
                     style={{
-                      padding: '12px 14px',
+                      padding: '11px 13px',
                       borderRadius: '10px',
                       backgroundColor: 'var(--bg-hover)',
                       border: '1px solid var(--border-color)',
                       color: 'var(--text-main)',
-                      fontSize: '0.92rem'
+                      fontSize: '0.9rem'
                     }}
                     required
                   />
@@ -792,32 +911,77 @@ ${brand} Administration`;
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)' }}>Login PIN Code (4–6 Digits)</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Designation / Title
+                  </label>
                   <input
                     type="text"
-                    placeholder="e.g. 1234"
-                    maxLength={8}
-                    value={editPin}
-                    onChange={e => setEditPin(e.target.value.replace(/\D/g, ''))}
+                    value={editDesignation}
+                    onChange={e => setEditDesignation(e.target.value)}
                     style={{
-                      padding: '12px 14px',
+                      padding: '11px 13px',
                       borderRadius: '10px',
                       backgroundColor: 'var(--bg-hover)',
                       border: '1px solid var(--border-color)',
                       color: 'var(--text-main)',
-                      fontSize: '0.92rem',
-                      letterSpacing: '2px',
+                      fontSize: '0.9rem'
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Email or Mobile Number <span style={{ color: '#EF4444' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={editEmailOrPhone}
+                    onChange={e => setEditEmailOrPhone(e.target.value)}
+                    style={{
+                      padding: '11px 13px',
+                      borderRadius: '10px',
+                      backgroundColor: 'var(--bg-hover)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.9rem'
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                      Staff Password / PIN
+                    </label>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Master can reset</span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Enter new password/PIN"
+                    value={editPin}
+                    onChange={e => setEditPin(e.target.value)}
+                    style={{
+                      padding: '11px 13px',
+                      borderRadius: '10px',
+                      backgroundColor: 'var(--bg-hover)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.9rem',
                       fontFamily: 'monospace'
                     }}
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)' }}>Account Access Status (Kill Switch)</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                    Access Status (Kill Switch)
+                  </label>
                   <div 
                     onClick={() => setEditIsActive(!editIsActive)}
                     style={{
-                      padding: '12px 14px',
+                      padding: '10px 14px',
                       borderRadius: '10px',
                       backgroundColor: editIsActive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
                       border: `1px solid ${editIsActive ? '#10B981' : '#EF4444'}`,
@@ -827,12 +991,36 @@ ${brand} Administration`;
                       justifyContent: 'space-between'
                     }}
                   >
-                    <span style={{ fontSize: '0.86rem', fontWeight: 700, color: editIsActive ? '#10B981' : '#EF4444' }}>
+                    <span style={{ fontSize: '0.84rem', fontWeight: 700, color: editIsActive ? '#10B981' : '#EF4444' }}>
                       {editIsActive ? '🟢 Active & Permitted' : '🔴 Revoked / Blocked'}
                     </span>
-                    <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)' }}>Click to toggle</span>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>Click to toggle</span>
                   </div>
                 </div>
+              </div>
+
+              <div
+                onClick={() => setEditMustChangePassword(!editMustChangePassword)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 12px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--bg-hover)',
+                  cursor: 'pointer',
+                  userSelect: 'none'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={editMustChangePassword}
+                  onChange={() => {}}
+                  style={{ accentColor: '#6366F1', width: '16px', height: '16px' }}
+                />
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-main)' }}>
+                  Require staff to change password upon next login
+                </span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
@@ -997,29 +1185,47 @@ ${brand} Administration`;
                       {sharingEmployee.is_active === false ? 'Revoked' : 'Active'}
                     </span>
                   </div>
-                  <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>
-                    {sharingEmployee.email_or_phone}
+                  <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                    {sharingEmployee.designation || 'Showroom Staff'} • <span style={{ fontFamily: 'monospace' }}>{sharingEmployee.email_or_phone}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Secret PIN Pill */}
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontWeight: 600, textTransform: 'uppercase' }}>Login PIN</div>
-                <div style={{ 
-                  fontSize: '1.3rem', 
-                  fontWeight: 900, 
-                  letterSpacing: '3px', 
-                  fontFamily: 'monospace', 
-                  color: '#10B981',
-                  background: 'rgba(16, 185, 129, 0.12)',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
-                  padding: '4px 14px',
-                  borderRadius: '8px',
-                  display: 'inline-block',
-                  marginTop: '2px'
-                }}>
-                  {sharingEmployee.pin_code || '1234'}
+              {/* Staff Login ID & PIN Pills */}
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', fontWeight: 600, textTransform: 'uppercase' }}>Login ID</div>
+                  <div style={{ 
+                    fontSize: '0.95rem', 
+                    fontWeight: 800, 
+                    fontFamily: 'monospace', 
+                    color: 'var(--accent-primary)',
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-color)',
+                    padding: '5px 12px',
+                    borderRadius: '8px',
+                    marginTop: '2px'
+                  }}>
+                    {sharingEmployee.username || sharingEmployee.email_or_phone}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', fontWeight: 600, textTransform: 'uppercase' }}>Password / PIN</div>
+                  <div style={{ 
+                    fontSize: '1.1rem', 
+                    fontWeight: 900, 
+                    letterSpacing: '1px', 
+                    fontFamily: 'monospace', 
+                    color: '#10B981',
+                    background: 'rgba(16, 185, 129, 0.12)',
+                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    padding: '4px 14px',
+                    borderRadius: '8px',
+                    marginTop: '2px'
+                  }}>
+                    {sharingEmployee.password || sharingEmployee.pin_code || '1234'}
+                  </div>
                 </div>
               </div>
             </div>

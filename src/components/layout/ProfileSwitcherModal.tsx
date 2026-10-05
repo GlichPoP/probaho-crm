@@ -10,6 +10,7 @@ interface ProfileSwitcherModalProps {
   onOpenStaffSettings: () => void;
   onOpenAuthModal?: () => void;
   onLockSession?: () => void;
+  onChangePassword?: () => void;
 }
 
 export const ProfileSwitcherModal: React.FC<ProfileSwitcherModalProps> = ({
@@ -18,7 +19,8 @@ export const ProfileSwitcherModal: React.FC<ProfileSwitcherModalProps> = ({
   onSelectUser,
   onOpenStaffSettings,
   onOpenAuthModal,
-  onLockSession
+  onLockSession,
+  onChangePassword
 }) => {
   const allUsers = dbService.getUserAccounts();
   const masters = allUsers.filter(u => u.role === 'master');
@@ -227,6 +229,31 @@ export const ProfileSwitcherModal: React.FC<ProfileSwitcherModalProps> = ({
             <Shield size={16} />
             <span>Manage Staff Access Permissions & RBAC Hub</span>
           </button>
+
+          {onChangePassword && (
+            <button
+              onClick={() => { onClose(); onChangePassword(); }}
+              style={{
+                padding: '9px 18px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                color: '#10B981',
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                width: '100%',
+                justifyContent: 'center'
+              }}
+              className="hover-lift"
+            >
+              <KeyRound size={15} />
+              <span>Change My Password / Security PIN</span>
+            </button>
+          )}
 
           {onOpenAuthModal && (
             <button

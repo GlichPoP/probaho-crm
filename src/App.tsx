@@ -20,6 +20,7 @@ import { SettingsView, type ThemeMode, type SettingsSubTab } from './components/
 import { OnboardingWizardModal } from './components/onboarding/OnboardingWizardModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { LoginScreen } from './components/auth/LoginScreen';
+import { ChangePasswordModal } from './components/auth/ChangePasswordModal';
 import { AboutModal } from './components/layout/AboutModal';
 import { UpdateNotificationToast } from './components/layout/UpdateNotificationToast';
 
@@ -43,6 +44,7 @@ export function App() {
     return false;
   });
   const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState<boolean>(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState<boolean>(() => currentUser?.must_change_password === true);
   const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false);
   const [isAuthOpen, setIsAuthOpen] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
@@ -357,6 +359,7 @@ export function App() {
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleSidebar={() => setIsSidebarCollapsed(prev => !prev)}
           onLockSession={handleLockSession}
+          onOpenChangePassword={() => setIsChangePasswordOpen(true)}
         />
 
         {/* Dynamic View Route */}
@@ -540,8 +543,20 @@ export function App() {
           }}
           onOpenAuthModal={() => setIsAuthOpen(true)}
           onLockSession={handleLockSession}
+          onChangePassword={() => setIsChangePasswordOpen(true)}
         />
       )}
+
+      {/* Change Password / Set Personal Security PIN Modal */}
+      <ChangePasswordModal
+        isOpen={isChangePasswordOpen}
+        currentUser={currentUser}
+        onClose={() => setIsChangePasswordOpen(false)}
+        onSuccess={() => {
+          refreshData();
+        }}
+        isEnforced={currentUser?.must_change_password === true}
+      />
 
       {/* Universal Sign In / Company Workspace Auth Modal */}
       <AuthModal

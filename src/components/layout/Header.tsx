@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, Moon, Sun, DollarSign, Package, Truck, PanelLeft, Cloud, Lock } from 'lucide-react';
+import { Search, Plus, Moon, Sun, DollarSign, Package, Truck, PanelLeft, Cloud, Lock, KeyRound } from 'lucide-react';
 import type { UserAccount, SyncStatus } from '../../types/crm';
 import { firebaseSync } from '../../services/firebaseSync';
 import { LanguageDropdown } from './LanguageDropdown';
@@ -20,6 +20,7 @@ interface HeaderProps {
   isSidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
   onLockSession?: () => void;
+  onOpenChangePassword?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -36,7 +37,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCloudSettings,
   isSidebarCollapsed,
   onToggleSidebar,
-  onLockSession
+  onLockSession,
+  onOpenChangePassword
 }) => {
   const { t, currencySymbol } = useLocalization();
   const [cloudStatus, setCloudStatus] = useState<SyncStatus>(() => firebaseSync.getStatus());
@@ -272,6 +274,30 @@ export const Header: React.FC<HeaderProps> = ({
                   {currentUser.role === 'master' ? 'Master Profile' : 'Employee'}
                 </div>
               </div>
+            </button>
+          )}
+
+          {/* Quick Change Password Button */}
+          {onOpenChangePassword && (
+            <button
+              onClick={onOpenChangePassword}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '38px',
+                height: '38px',
+                borderRadius: '10px',
+                backgroundColor: 'var(--bg-primary)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                transition: 'all 0.18s ease'
+              }}
+              className="hover-lift"
+              title="Change Password / Security PIN"
+            >
+              <KeyRound size={16} />
             </button>
           )}
 
