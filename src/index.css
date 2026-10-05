@@ -1,0 +1,568 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root, [data-theme='light'] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-highlight: rgba(0, 0, 0, 0.18);
+  
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+  
+  --accent-primary: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-glow: rgba(99, 102, 241, 0.12);
+  
+  --emerald: #059669;
+  --emerald-bg: rgba(16, 185, 129, 0.1);
+  --ruby: #dc2626;
+  --ruby-bg: rgba(239, 68, 68, 0.1);
+  --amber: #d97706;
+  --amber-bg: rgba(245, 158, 11, 0.1);
+  --cyan: #0891b2;
+  --cyan-bg: rgba(6, 182, 212, 0.1);
+}
+
+[data-theme='dark'] {
+  --bg-primary: #09090b;
+  --bg-secondary: #121215;
+  --bg-card: #16161a;
+  --bg-hover: #1f1f24;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(255, 255, 255, 0.18);
+  
+  --text-main: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+  
+  --accent-primary: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  
+  --emerald: #10b981;
+  --emerald-bg: rgba(16, 185, 129, 0.12);
+  --ruby: #ef4444;
+  --ruby-bg: rgba(239, 68, 68, 0.12);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245, 158, 11, 0.12);
+  --cyan: #06b6d4;
+  --cyan-bg: rgba(6, 182, 212, 0.12);
+}
+
+[data-theme='gray'] {
+  --bg-primary: #18181b;
+  --bg-secondary: #202024;
+  --bg-card: #27272b;
+  --bg-hover: #313136;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-highlight: rgba(129, 140, 248, 0.35);
+  
+  --text-main: #fafafa;
+  --text-muted: #d4d4d8;
+  --text-dim: #a1a1aa;
+  
+  --accent-primary: #818cf8;
+  --accent-hover: #6366f1;
+  --accent-glow: rgba(129, 140, 248, 0.15);
+  
+  --emerald: #34d399;
+  --emerald-bg: rgba(52, 211, 153, 0.12);
+  --ruby: #f87171;
+  --ruby-bg: rgba(248, 113, 113, 0.12);
+  --amber: #fbbf24;
+  --amber-bg: rgba(251, 191, 36, 0.12);
+  --cyan: #22d3ee;
+  --cyan-bg: rgba(34, 211, 238, 0.12);
+}
+
+/* ==========================================================================
+   THEME FAMILY 2: Notion & Airbnb Soft UI (Notion_Airbnb_SoftWarm)
+   ========================================================================== */
+
+/* 1. Soft UI Light (Cozy Sand - Exact Previewed Light Version) */
+[data-theme='notion-light'] {
+  --bg-primary: #fcfaf7;
+  --bg-secondary: #f7f3eb;
+  --bg-card: #ffffff;
+  --bg-hover: #f5f0e8;
+  --border-color: #ede7dd;
+  --border-highlight: #d9cdbd;
+  
+  --text-main: #2d2623;
+  --text-muted: #786d68;
+  --text-dim: #9e938e;
+  
+  --accent-primary: #d97706;
+  --accent-hover: #b45309;
+  --accent-glow: rgba(217, 119, 6, 0.15);
+  
+  --emerald: #059669;
+  --emerald-bg: rgba(16, 185, 129, 0.12);
+  --ruby: #dc2626;
+  --ruby-bg: rgba(239, 68, 68, 0.12);
+  --amber: #d97706;
+  --amber-bg: rgba(217, 119, 6, 0.15);
+  --cyan: #0891b2;
+  --cyan-bg: rgba(8, 145, 178, 0.12);
+}
+
+/* 2. Soft UI Dark (Warm Charcoal & Espresso) */
+[data-theme='notion-dark'] {
+  --bg-primary: #1c1917;
+  --bg-secondary: #262220;
+  --bg-card: #292524;
+  --bg-hover: #36302d;
+  --border-color: #44403c;
+  --border-highlight: #57534e;
+  
+  --text-main: #fcfaf7;
+  --text-muted: #a8a29e;
+  --text-dim: #78716c;
+  
+  --accent-primary: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-glow: rgba(245, 158, 11, 0.2);
+  
+  --emerald: #10b981;
+  --emerald-bg: rgba(16, 185, 129, 0.14);
+  --ruby: #ef4444;
+  --ruby-bg: rgba(239, 68, 68, 0.14);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245, 158, 11, 0.16);
+  --cyan: #06b6d4;
+  --cyan-bg: rgba(6, 182, 212, 0.14);
+}
+
+/* 3. Soft UI Gray (Cozy Warm Taupe / Slate Gray) */
+[data-theme='notion-gray'] {
+  --bg-primary: #272422;
+  --bg-secondary: #302c2a;
+  --bg-card: #383431;
+  --bg-hover: #443f3b;
+  --border-color: #524c47;
+  --border-highlight: #68605a;
+  
+  --text-main: #f5f3f0;
+  --text-muted: #b8b2ac;
+  --text-dim: #8a837d;
+  
+  --accent-primary: #eab308;
+  --accent-hover: #ca8a04;
+  --accent-glow: rgba(234, 179, 8, 0.2);
+  
+  --emerald: #34d399;
+  --emerald-bg: rgba(52, 211, 153, 0.14);
+  --ruby: #f87171;
+  --ruby-bg: rgba(248, 113, 113, 0.14);
+  --amber: #fbbf24;
+  --amber-bg: rgba(251, 191, 36, 0.16);
+  --cyan: #22d3ee;
+  --cyan-bg: rgba(34, 211, 238, 0.14);
+}
+
+/* Structural & Architectural Overrides for Notion & Airbnb Soft UI */
+[data-theme^='notion-'] * {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+[data-theme^='notion-'] h1, [data-theme^='notion-'] h2, [data-theme^='notion-'] h3, [data-theme^='notion-'] h4, [data-theme^='notion-'] .brand-font {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  letter-spacing: -0.025em;
+}
+
+/* Cozy Rounded Sidebar Island Effect */
+[data-theme^='notion-'] aside {
+  border-radius: 0 28px 28px 0 !important;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Pill Navigation Buttons inside Sidebar */
+[data-theme^='notion-'] aside nav button {
+  border-radius: 99px !important;
+  padding: 12px 18px !important;
+  margin-bottom: 6px !important;
+  font-weight: 600 !important;
+}
+
+[data-theme^='notion-'] aside nav button[style*='background'], [data-theme^='notion-'] aside nav button.active {
+  background-color: var(--bg-card) !important;
+  color: var(--accent-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 6px 16px var(--accent-glow) !important;
+}
+
+[data-theme^='notion-'] aside nav button[style*='background'] * {
+  color: var(--accent-primary) !important;
+}
+
+/* Elevated Rounded Glass Cards */
+[data-theme^='notion-'] .glass-card, [data-theme^='notion-'] [class*='card'] {
+  border-radius: 24px !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid var(--border-color) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-theme^='notion-'] .hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Pill Buttons across the App */
+[data-theme^='notion-'] .btn, [data-theme^='notion-'] button {
+  border-radius: 99px !important;
+}
+
+/* Table Header Formatting */
+[data-theme^='notion-'] table th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-muted) !important;
+  border-bottom: 2px solid var(--border-color) !important;
+  font-weight: 700 !important;
+}
+
+[data-theme^='notion-'] table td {
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 14px 18px !important;
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .brand-font {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Linear.app High-Density Minimalist Surface Cards */
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--border-highlight);
+}
+
+.hover-lift:hover {
+  border-color: var(--border-highlight);
+  background-color: var(--bg-hover);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-highlight);
+}
+
+/* Buttons (Linear.app Crisp Monochrome / Accent) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  outline: none;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--text-main);
+  color: var(--bg-primary);
+  border-color: var(--text-main);
+}
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-highlight);
+}
+
+.btn-danger {
+  background: var(--ruby-bg);
+  color: var(--ruby);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.btn-danger:hover {
+  background: var(--ruby);
+  color: #FFFFFF;
+}
+
+/* Universal Form Input Styling */
+.input-field, input[type="text"], input[type="password"], input[type="email"], select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.input-field:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
+  border-color: var(--accent-primary) !important;
+  background-color: var(--bg-card);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Badges & Status Pills (Linear.app Style) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+}
+
+.badge-success {
+  background: var(--emerald-bg);
+  color: var(--emerald);
+  border-color: rgba(16, 185, 129, 0.22);
+}
+.badge-warning {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border-color: rgba(245, 158, 11, 0.22);
+}
+.badge-danger {
+  background: var(--ruby-bg);
+  color: var(--ruby);
+  border-color: rgba(239, 68, 68, 0.22);
+}
+.badge-info {
+  background: var(--cyan-bg);
+  color: var(--cyan);
+  border-color: rgba(6, 182, 212, 0.22);
+}
+.badge-primary {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--accent-primary);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+/* Linear Status Pill Indicator with Dot */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-main);
+  white-space: nowrap;
+}
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Linear Monospaced Order/SKU ID Chip */
+.chip-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+/* Linear Avatar Circle */
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+
+/* High-Density Table Styling */
+.crm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.crm-table th {
+  background: var(--bg-secondary);
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8.5px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.crm-table td {
+  padding: 9px 14px;
+  font-size: 0.83rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  vertical-align: middle;
+  transition: background-color 0.12s ease;
+}
+
+.crm-table tr:hover td {
+  background: var(--bg-hover);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseAlert {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.pulse-alert {
+  animation: pulseAlert 2s infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Header Utilities */
+@media (max-width: 1400px) {
+  .header-kpi-secondary {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-kpi-container {
+    display: none !important;
+  }
+}
+
+/* Global Print Layout Master Reset - Ensures exact 1-page output with zero blank top/bottom pages */
+@media print {
+  body:has(#printable-vendor-payout-content) * :not(#printable-vendor-payout-content):not(#printable-vendor-payout-content *):not(:has(#printable-vendor-payout-content)),
+  body:has(#printable-challan-content) * :not(#printable-challan-content):not(#printable-challan-content *):not(:has(#printable-challan-content)),
+  body:has(#manifest-print-box) * :not(#manifest-print-box):not(#manifest-print-box *):not(:has(#manifest-print-box)) {
+    display: none !important;
+  }
+
+  body:has(#printable-vendor-payout-content),
+  body:has(#printable-vendor-payout-content) #root,
+  body:has(#printable-vendor-payout-content) .app-container,
+  body:has(#printable-vendor-payout-content) main,
+  body:has(#printable-vendor-payout-content) div:has(#printable-vendor-payout-content),
+  body:has(#printable-challan-content),
+  body:has(#printable-challan-content) #root,
+  body:has(#printable-challan-content) .app-container,
+  body:has(#printable-challan-content) main,
+  body:has(#printable-challan-content) div:has(#printable-challan-content),
+  body:has(#manifest-print-box),
+  body:has(#manifest-print-box) #root,
+  body:has(#manifest-print-box) .app-container,
+  body:has(#manifest-print-box) main,
+  body:has(#manifest-print-box) div:has(#manifest-print-box) {
+    display: block !important;
+    position: static !important;
+    transform: none !important;
+    filter: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: visible !important;
+    width: 100% !important;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

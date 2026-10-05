@@ -1,0 +1,106 @@
+PROBAHO CRM SOLUTIONS - END USER LICENSE AGREEMENT & DISCLAIMER OF LIABILITY
+Copyright (c) 2026 Irfanur Rahman. All Rights Reserved.
+Author / Creator: Irfanur Rahman
+Contact: irfanur6@gmail.com | https://www.linkedin.com/in/irfanur-rahman123/
+
+PLEASE READ THIS END USER LICENSE AGREEMENT ("AGREEMENT") CAREFULLY BEFORE INSTALLING 
+OR USING PROBAHO CRM SOLUTIONS ("SOFTWARE"). BY CLICKING "I AGREE", "ACCEPT", OR BY 
+DOWNLOADING, INSTALLING, OR USING THIS SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ, 
+UNDERSTOOD, AND IRREVOCABLY AGREE TO BE BOUND BY ALL TERMS AND CONDITIONS HEREIN.
+
+IF YOU DO NOT AGREE TO EVERY TERM OF THIS AGREEMENT, DO NOT INSTALL OR USE THIS SOFTWARE.
+
+================================================================================
+1. GRANT OF LICENSE (FREEWARE / OPEN USE)
+================================================================================
+The author and sole copyright owner, Irfanur Rahman ("Licensor"), hereby grants you 
+("User" or "Licensee") a free, non-exclusive, revocable, worldwide license to install, 
+run, and operate this Software for personal, commercial, showroom, wholesale, and 
+retail business management operations without payment of licensing royalties.
+
+================================================================================
+2. MANDATORY ATTRIBUTION & OWNERSHIP PRESERVATION
+================================================================================
+All intellectual property, code structure, trademarks, and copyright in this Software 
+belong solely to Irfanur Rahman. You agree that:
+(a) The author's name ("Irfanur Rahman"), copyright notices, and the in-app "About Creator" 
+    dialog MUST remain visible, unaltered, and unremoved in all deployments or forks.
+(b) You may NOT claim original authorship, rebrand, lease, sub-license, or resell copies 
+    of this Software for commercial gain.
+
+================================================================================
+3. ABSOLUTE "AS-IS" DISCLAIMER OF ALL WARRANTIES
+================================================================================
+THIS SOFTWARE IS PROVIDED ON AN "AS IS", "WITH ALL FAULTS", AND "AS AVAILABLE" BASIS, 
+WITHOUT WARRANTY OF ANY KIND WHATSOEVER. TO THE MAXIMUM EXTENT PERMITTED UNDER APPLICABLE 
+INTERNATIONAL AND LOCAL LAW, THE AUTHOR (IRFANUR RAHMAN) EXPRESSLY DISCLAIMS ALL 
+WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT LIMITED TO:
+- WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT;
+- WARRANTIES ARISING OUT OF COURSE OF DEALING, USAGE, OR TRADE PRACTICE;
+- WARRANTIES THAT THE SOFTWARE WILL BE UNINTERRUPTED, ERROR-FREE, SECURE, BUG-FREE, 
+  OR COMPATIBLE WITH ANY SPECIFIC OPERATING SYSTEM OR HARDWARE CONFIGURATION.
+
+================================================================================
+4. COMPLETE LIMITATION OF LIABILITY & LEGAL IMMUNITY FOR IRFANUR RAHMAN
+================================================================================
+UNDER NO CIRCUMSTANCES SHALL THE CREATOR (IRFANUR RAHMAN) BE HELD CIVILLY, CRIMINALLY, 
+ADMINISTRATIVELY, OR FINANCIALLY LIABLE FOR ANY CLAIM, DEMAND, INJURY, PROSECUTION, 
+OR DAMAGES OF ANY NATURE WHATSOEVER ARISING OUT OF OR IN CONNECTION WITH THE SOFTWARE, 
+ITS PERFORMANCE, ITS INABILITY TO RUN, OR TRANSACTIONS FACILITATED THEREBY.
+
+THIS EXCLUSION APPLIES TO ALL DAMAGES INCLUDING, BUT NOT LIMITED TO:
+- DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, PUNITIVE, OR EXEMPLARY DAMAGES;
+- LOSS OF BUSINESS PROFITS, REVENUE, SALES, COMMERCIAL OPPORTUNITIES, OR CONTRACTS;
+- LOSS, CORRUPTION, OR THEFT OF DATA, CUSTOMER RECORDS, PASSWORDS, OR FINANCIAL LEDGERS;
+- BUSINESS INTERRUPTION, SYSTEM CRASHES, HARDWARE DAMAGE, OR THIRD-PARTY CLAIMS;
+REGARDLESS OF WHETHER SUCH LIABILITY ARISES IN CONTRACT, TORT (INCLUDING NEGLIGENCE), 
+STRICT LIABILITY, INDEMNITY, OR BREACH OF STATUTORY DUTY, AND EVEN IF ADVISED OF THE 
+POSSIBILITY OF SUCH DAMAGES.
+
+================================================================================
+5. ZERO LIABILITY FOR FRAUDULENT, ILLEGAL, OR DECEPTIVE ACTIVITIES
+================================================================================
+PROBAHO CRM Solutions is an open, offline-first management utility tool. The creator, 
+Irfanur Rahman, does NOT monitor, host, verify, validate, or inspect user data, financial 
+ledgers, transactions, sales receipts, customer relations, or shipping activities.
+
+THEREFORE, YOU EXPRESSLY AGREE AND ACKNOWLEDGE THAT:
+(a) IRFANUR RAHMAN SHALL BEAR ABSOLUTELY ZERO RESPONSIBILITY, ACCOUNTABILITY, OR LIABILITY 
+    FOR ANY FRAUDULENT, DECEPTIVE, UNLAWFUL, OR CRIMINAL CONDUCT COMMITTED BY ANY BUSINESS, 
+    EMPLOYEE, MERCHANT, CUSTOMER, OR THIRD PARTY USING OR CONNECTED TO THIS SOFTWARE.
+(b) Irfanur Rahman is NOT liable for fake invoices, VAT/BIN evasion, tax non-compliance, 
+    NBR regulatory penalties, money laundering, delivery fraud, courier discrepancies, 
+    counterfeit merchandise sales, or breach of consumer protection acts.
+(c) The User assumes sole, total, and exclusive legal responsibility for ensuring their 
+    commercial operations, invoicing, taxation, and employee actions strictly comply with 
+    all applicable municipal, national, and international laws and regulations.
+
+================================================================================
+6. DATA LOSS, OFFLINE STORAGE & BACKUP INDEMNIFICATION
+================================================================================
+All CRM and ERP data is stored locally on your device hardware using an embedded local 
+engine. Irfanur Rahman has no remote access to your device. You are solely responsible 
+for generating regular database backups using the built-in backup tools. 
+Irfanur Rahman is completely indemnified and held harmless against any catastrophic 
+database corruption, hard drive failure, power outage loss, or malware damage.
+
+================================================================================
+7. INDEMNIFICATION BY USER
+================================================================================
+You agree to indemnify, defend, and hold harmless Irfanur Rahman from and against any 
+and all claims, lawsuits, administrative penalties, liabilities, losses, costs, or 
+legal fees (including attorney's fees) arising out of or resulting from your installation, 
+misuse, commercial operations, or violations of law involving this Software.
+
+================================================================================
+8. SEVERABILITY AND GOVERNING LAW
+================================================================================
+If any provision of this Agreement is held to be invalid, unenforceable, or illegal 
+by a court of competent jurisdiction, the remaining provisions shall remain in full force 
+and effect to the maximum extent permissible under international law.
+
+================================================================================
+BY PROCEEDING WITH INSTALLATION, YOU CONFIRM THAT YOU ARE AT LEAST 18 YEARS OF AGE, 
+AUTHORIZED TO ACCEPT THIS AGREEMENT ON BEHALF OF YOURSELF OR YOUR ORGANIZATION, 
+AND AGREE TO ALL OF THE TERMS STATED ABOVE.
+================================================================================

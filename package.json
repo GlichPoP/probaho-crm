@@ -1,0 +1,84 @@
+{
+  "name": "probaho-crm-desktop",
+  "productName": "PROBAHO CRM Solutions",
+  "version": "1.0.0",
+  "description": "PROBAHO CRM Solutions - Enterprise Business Operations Platform",
+  "author": "Irfanur Rahman <irfanur6@gmail.com> (https://www.linkedin.com/in/irfanur-rahman123/)",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "start": "electron .",
+    "electron:build": "npm run build && electron-builder --win"
+  },
+  "build": {
+    "appId": "com.irfanurrahman.probahocrm",
+    "productName": "PROBAHO CRM Solutions",
+    "copyright": "Copyright © 2026 Irfanur Rahman. All rights reserved.",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "build/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "license": "build/license.txt",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PROBAHO CRM Solutions",
+      "uninstallDisplayName": "PROBAHO CRM Solutions",
+      "runAfterFinish": true
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable.${ext}"
+    }
+  },
+  "dependencies": {
+    "firebase": "^12.19.0",
+    "lucide-react": "^1.24.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "recharts": "^3.9.2",
+    "sql.js": "^1.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/sql.js": "^1.4.11",
+    "@vitejs/plugin-react": "^6.0.3",
+    "electron": "^43.1.0",
+    "electron-builder": "^26.15.3",
+    "oxlint": "^1.71.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1",
+    "vite-plugin-electron": "^1.1.0"
+  }
+}
