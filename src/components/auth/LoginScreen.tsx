@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Lock, User, Eye, EyeOff, ShieldCheck, ArrowRight, Moon, Sun, 
-  Check, X, Building2, AlertCircle, ShieldAlert 
+  Check, Building2, AlertCircle 
 } from 'lucide-react';
 import { ProbahoLogo } from '../layout/ProbahoLogo';
 import { dbService } from '../../database/db';
@@ -65,7 +65,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       if (res.success && res.user) {
         onLoginSuccess(res.user, keepLoggedIn);
       } else {
-        setErrorMsg(res.message || 'Invalid username or password. Please verify your credentials.');
+        setErrorMsg(res.message || 'Invalid username or password. Please verify credentials.');
         setIsLoading(false);
       }
     }, 200);
@@ -78,11 +78,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
     if (!canSubmitMaster) {
       if (!masterVal.isValid) {
-        setErrorMsg('Please fulfill all Master password security criteria.');
+        setErrorMsg('Please satisfy all Master password requirements.');
       } else if (!passwordsMatch) {
-        setErrorMsg('The passwords do not match.');
+        setErrorMsg('Passwords do not match.');
       } else if (masterFullName.trim().length < 2) {
-        setErrorMsg('Please enter the Master Administrator Full Name.');
+        setErrorMsg('Please enter Master Administrator Full Name.');
       }
       return;
     }
@@ -98,11 +98,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       });
 
       if (res.success && res.user) {
-        setSuccessMsg('Master account initialized successfully! Launching CRM...');
+        setSuccessMsg('Master account created! Launching CRM...');
         setIsMasterConfigured(true);
         setTimeout(() => {
           onLoginSuccess(res.user!, keepLoggedIn);
-        }, 800);
+        }, 600);
       } else {
         setErrorMsg(res.message || 'Failed to initialize Master account.');
         setIsLoading(false);
@@ -118,17 +118,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'var(--bg-primary)',
-      padding: '24px',
+      padding: '16px',
       position: 'relative',
       overflow: 'hidden'
     }}>
       {/* Ambient Radial Glow Background */}
       <div style={{
         position: 'absolute',
-        width: '650px',
-        height: '650px',
+        width: '550px',
+        height: '550px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, rgba(139, 92, 246, 0.06) 50%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.04) 50%, transparent 70%)',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -138,11 +138,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       {/* Top Bar with Theme Toggle */}
       <div style={{
         position: 'absolute',
-        top: '20px',
-        right: '24px',
+        top: '16px',
+        right: '20px',
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '10px',
+        zIndex: 20
       }}>
         {onToggleTheme && (
           <button
@@ -151,21 +152,21 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '38px',
-              height: '38px',
-              borderRadius: '10px',
+              width: '34px',
+              height: '34px',
+              borderRadius: '9px',
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-color)',
               color: 'var(--text-muted)',
               cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+              boxShadow: '0 2px 6px rgba(0,0,0,0.06)'
             }}
             title="Toggle Light / Dark Mode"
           >
             {theme === 'dark' || theme === 'notion-dark' ? (
-              <Sun size={18} style={{ color: '#F59E0B' }} />
+              <Sun size={16} style={{ color: '#F59E0B' }} />
             ) : (
-              <Moon size={18} style={{ color: '#6366F1' }} />
+              <Moon size={16} style={{ color: '#6366F1' }} />
             )}
           </button>
         )}
@@ -174,27 +175,29 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       {/* Main Form Container */}
       <div style={{
         width: '100%',
-        maxWidth: mode === 'setup' ? '500px' : '440px',
+        maxWidth: '450px',
+        maxHeight: 'calc(100vh - 32px)',
+        overflowY: 'auto',
         backgroundColor: 'var(--bg-card)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         border: '1px solid var(--border-color)',
-        borderRadius: '24px',
-        padding: mode === 'setup' ? '32px 32px' : '36px 32px',
-        boxShadow: '0 20px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(99, 102, 241, 0.12)',
+        borderRadius: '20px',
+        padding: '24px 26px',
+        boxShadow: '0 16px 40px -10px rgba(0, 0, 0, 0.2), 0 0 24px rgba(99, 102, 241, 0.08)',
         position: 'relative',
         zIndex: 10,
-        transition: 'all 0.3s ease'
+        transition: 'all 0.25s ease'
       }}>
-        {/* Logo and Brand Header */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <div style={{ display: 'inline-block', marginBottom: '12px' }}>
-            <ProbahoLogo size={60} style={{ borderRadius: '16px', boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)' }} />
+        {/* Compact Logo & Brand Header */}
+        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+          <div style={{ display: 'inline-block', marginBottom: '8px' }}>
+            <ProbahoLogo size={42} style={{ borderRadius: '12px', boxShadow: '0 4px 16px rgba(99, 102, 241, 0.25)' }} />
           </div>
           <h1 style={{
-            fontSize: '1.45rem',
+            fontSize: '1.25rem',
             fontWeight: 800,
-            margin: '0 0 4px 0',
+            margin: '0 0 2px 0',
             background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #A855F7 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -203,234 +206,276 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             PROBAHO CRM Solutions
           </h1>
           <p style={{
-            fontSize: '0.84rem',
+            fontSize: '0.78rem',
             color: 'var(--text-muted)',
             margin: 0
           }}>
-            {mode === 'setup' 
-              ? 'First-Time Setup: Establish Master Administrator Account' 
-              : 'Enterprise Business Management & Showroom POS'}
+            {mode === 'login' ? 'Showroom & Business Access Terminal' : 'First-Time Setup: Create Master Profile'}
           </p>
         </div>
 
-        {/* Feedback Banners */}
+        {/* Top Segmented Navigation Tab */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '4px',
+          padding: '3px',
+          backgroundColor: 'var(--bg-hover)',
+          borderRadius: '11px',
+          marginBottom: '14px',
+          border: '1px solid var(--border-color)'
+        }}>
+          <button
+            type="button"
+            onClick={() => { setErrorMsg(null); setMode('login'); }}
+            style={{
+              padding: '7px 8px',
+              borderRadius: '8px',
+              fontSize: '0.8rem',
+              fontWeight: mode === 'login' ? 700 : 500,
+              backgroundColor: mode === 'login' ? 'var(--bg-card)' : 'transparent',
+              color: mode === 'login' ? 'var(--accent-primary)' : 'var(--text-muted)',
+              border: mode === 'login' ? '1px solid var(--border-color)' : 'none',
+              boxShadow: mode === 'login' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <User size={14} />
+            <span>Sign In</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setErrorMsg(null); setMode('setup'); }}
+            style={{
+              padding: '7px 8px',
+              borderRadius: '8px',
+              fontSize: '0.8rem',
+              fontWeight: mode === 'setup' ? 700 : 500,
+              backgroundColor: mode === 'setup' ? 'var(--bg-card)' : 'transparent',
+              color: mode === 'setup' ? 'var(--accent-primary)' : 'var(--text-muted)',
+              border: mode === 'setup' ? '1px solid var(--border-color)' : 'none',
+              boxShadow: mode === 'setup' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <ShieldCheck size={14} />
+            <span>{isMasterConfigured ? 'Master Config' : 'Create Master'}</span>
+          </button>
+        </div>
+
+        {/* Feedback Alerts */}
         {errorMsg && (
           <div style={{
-            padding: '12px 14px',
-            borderRadius: '12px',
-            backgroundColor: 'rgba(239, 68, 68, 0.12)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
+            padding: '8px 12px',
+            borderRadius: '10px',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.25)',
             color: '#EF4444',
-            fontSize: '0.84rem',
-            marginBottom: '18px',
+            fontSize: '0.78rem',
+            marginBottom: '12px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '6px'
           }}>
-            <AlertCircle size={18} style={{ flexShrink: 0 }} />
+            <AlertCircle size={15} style={{ flexShrink: 0 }} />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {successMsg && (
           <div style={{
-            padding: '12px 14px',
-            borderRadius: '12px',
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
+            padding: '8px 12px',
+            borderRadius: '10px',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            border: '1px solid rgba(16, 185, 129, 0.25)',
             color: '#10B981',
-            fontSize: '0.84rem',
-            marginBottom: '18px',
+            fontSize: '0.78rem',
+            marginBottom: '12px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '6px'
           }}>
-            <Check size={18} style={{ flexShrink: 0 }} />
+            <Check size={15} style={{ flexShrink: 0 }} />
             <span>{successMsg}</span>
           </div>
         )}
 
         {/* -------------------- MODE: INITIAL MASTER SETUP -------------------- */}
         {mode === 'setup' && (
-          <form onSubmit={handleMasterSetupSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div style={{
-              padding: '10px 12px',
-              borderRadius: '10px',
-              backgroundColor: 'rgba(99, 102, 241, 0.08)',
-              border: '1px solid rgba(99, 102, 241, 0.2)',
-              fontSize: '0.78rem',
-              color: 'var(--text-muted)',
-              lineHeight: 1.45,
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '8px'
-            }}>
-              <ShieldAlert size={16} style={{ color: '#6366F1', marginTop: '2px', flexShrink: 0 }} />
+          <form onSubmit={handleMasterSetupSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* Master ID / Username & Full Name in 2 columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
-                <strong style={{ color: 'var(--text-main)' }}>Root Security Requirement:</strong> Master accounts control all retail operations, staff permissions, and financial ledgers. A strong master password is mandatory.
-              </div>
-            </div>
-
-            {/* Master ID / Username & Full Name */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '5px' }}>
-                  Master ID / Username <span style={{ color: '#EF4444' }}>*</span>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
+                  Master ID <span style={{ color: '#EF4444' }}>*</span>
                 </label>
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="e.g. admin or owner"
+                  placeholder="admin"
                   value={masterUsername}
                   onChange={e => setMasterUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
                   required
-                  style={{ width: '100%', fontSize: '0.88rem' }}
+                  style={{ width: '100%', fontSize: '0.84rem', padding: '7px 10px' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '5px' }}>
-                  Master Full Name <span style={{ color: '#EF4444' }}>*</span>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
+                  Full Name <span style={{ color: '#EF4444' }}>*</span>
                 </label>
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="e.g. Irfanur Rahman"
+                  placeholder="Irfanur Rahman"
                   value={masterFullName}
                   onChange={e => setMasterFullName(e.target.value)}
                   required
-                  style={{ width: '100%', fontSize: '0.88rem' }}
+                  style={{ width: '100%', fontSize: '0.84rem', padding: '7px 10px' }}
                 />
               </div>
             </div>
 
             {/* Business / Showroom Name */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '5px' }}>
+              <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
                 Business or Showroom Name
               </label>
               <div style={{ position: 'relative' }}>
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="e.g. Urban Style Showroom"
+                  placeholder="e.g. Probaho Store"
                   value={businessName}
                   onChange={e => setBusinessName(e.target.value)}
-                  style={{ width: '100%', paddingLeft: '34px', fontSize: '0.88rem' }}
+                  style={{ width: '100%', paddingLeft: '30px', fontSize: '0.84rem', padding: '7px 10px 7px 30px' }}
                 />
-                <Building2 size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <Building2 size={14} style={{ position: 'absolute', left: '9px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
               </div>
             </div>
 
-            {/* Master Password */}
-            <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '5px' }}>
-                Master Strong Password <span style={{ color: '#EF4444' }}>*</span>
-              </label>
-              <div style={{ position: 'relative' }}>
+            {/* Password & Confirm Password in 2 columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
+                  Strong Password <span style={{ color: '#EF4444' }}>*</span>
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showMasterPassword ? 'text' : 'password'}
+                    className="input-field"
+                    placeholder="Enter password"
+                    value={masterPassword}
+                    onChange={e => setMasterPassword(e.target.value)}
+                    required
+                    style={{ width: '100%', paddingRight: '32px', fontSize: '0.84rem', padding: '7px 32px 7px 10px' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowMasterPassword(!showMasterPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '8px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--text-muted)',
+                      cursor: 'pointer',
+                      padding: 0
+                    }}
+                  >
+                    {showMasterPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
+                  Confirm Password <span style={{ color: '#EF4444' }}>*</span>
+                </label>
                 <input
-                  type={showMasterPassword ? 'text' : 'password'}
+                  type="password"
                   className="input-field"
-                  placeholder="Min 8 characters, Upper, Lower, Number, Symbol"
-                  value={masterPassword}
-                  onChange={e => setMasterPassword(e.target.value)}
+                  placeholder="Re-enter"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
                   required
-                  style={{ width: '100%', paddingRight: '38px', fontSize: '0.88rem' }}
+                  style={{ width: '100%', fontSize: '0.84rem', padding: '7px 10px' }}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowMasterPassword(!showMasterPassword)}
-                  style={{
-                    position: 'absolute',
-                    right: '10px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--text-muted)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {showMasterPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
               </div>
             </div>
 
-            {/* Master Password Strength Checklist */}
+            {/* Compact Password Strength Meter & Micro-Pills */}
             <div style={{
-              padding: '10px 12px',
-              borderRadius: '10px',
+              padding: '6px 8px',
+              borderRadius: '8px',
               backgroundColor: 'var(--bg-hover)',
               border: '1px solid var(--border-color)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '6px'
+              gap: '4px'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase' }}>
-                  Security Verification
+                <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-dim)' }}>
+                  Password Security Rules:
                 </span>
-                <span style={{ fontSize: '0.72rem', fontWeight: 800, color: masterVal.strengthColor }}>
+                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: masterVal.strengthColor }}>
                   {masterVal.strengthLabel} ({masterVal.score}/5)
                 </span>
               </div>
 
               {/* Progress bar */}
-              <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--border-color)', borderRadius: '2px', overflow: 'hidden' }}>
+              <div style={{ width: '100%', height: '3px', backgroundColor: 'var(--border-color)', borderRadius: '2px', overflow: 'hidden' }}>
                 <div style={{
                   width: `${(masterVal.score / 5) * 100}%`,
                   height: '100%',
                   backgroundColor: masterVal.strengthColor,
-                  transition: 'width 0.3s ease'
+                  transition: 'width 0.25s ease'
                 }} />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.73rem', marginTop: '2px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: masterVal.hasMinLength ? '#10B981' : 'var(--text-muted)' }}>
-                  {masterVal.hasMinLength ? <Check size={12} /> : <X size={12} />} 8+ Characters
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: masterVal.hasUppercase ? '#10B981' : 'var(--text-muted)' }}>
-                  {masterVal.hasUppercase ? <Check size={12} /> : <X size={12} />} Uppercase (A-Z)
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: masterVal.hasLowercase ? '#10B981' : 'var(--text-muted)' }}>
-                  {masterVal.hasLowercase ? <Check size={12} /> : <X size={12} />} Lowercase (a-z)
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: masterVal.hasNumber ? '#10B981' : 'var(--text-muted)' }}>
-                  {masterVal.hasNumber ? <Check size={12} /> : <X size={12} />} Number (0-9)
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', gridColumn: 'span 2', color: masterVal.hasSpecial ? '#10B981' : 'var(--text-muted)' }}>
-                  {masterVal.hasSpecial ? <Check size={12} /> : <X size={12} />} Special Symbol (!@#$%^&*...)
-                </div>
+              {/* Micro badge pills */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '2px' }}>
+                {[
+                  { label: '8+ Chars', met: masterVal.hasMinLength },
+                  { label: 'A-Z', met: masterVal.hasUppercase },
+                  { label: 'a-z', met: masterVal.hasLowercase },
+                  { label: '0-9', met: masterVal.hasNumber },
+                  { label: '!@# Symbol', met: masterVal.hasSpecial },
+                  { label: 'Match', met: passwordsMatch }
+                ].map((item, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      fontSize: '0.67rem',
+                      fontWeight: item.met ? 600 : 500,
+                      padding: '2px 6px',
+                      borderRadius: '5px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '3px',
+                      backgroundColor: item.met ? 'rgba(16, 185, 129, 0.12)' : 'var(--bg-card)',
+                      color: item.met ? '#10B981' : 'var(--text-muted)',
+                      border: `1px solid ${item.met ? 'rgba(16, 185, 129, 0.3)' : 'var(--border-color)'}`
+                    }}
+                  >
+                    {item.met ? <Check size={10} /> : <span style={{ opacity: 0.5 }}>•</span>}
+                    {item.label}
+                  </span>
+                ))}
               </div>
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '5px' }}>
-                Confirm Master Password <span style={{ color: '#EF4444' }}>*</span>
-              </label>
-              <input
-                type="password"
-                className="input-field"
-                placeholder="Re-enter master password"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                required
-                style={{ width: '100%', fontSize: '0.88rem' }}
-              />
-              {confirmPassword.length > 0 && (
-                <div style={{
-                  fontSize: '0.74rem',
-                  marginTop: '4px',
-                  color: passwordsMatch ? '#10B981' : '#EF4444',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}>
-                  {passwordsMatch ? <Check size={12} /> : <X size={12} />}
-                  {passwordsMatch ? 'Passwords match' : 'Passwords do not match'}
-                </div>
-              )}
             </div>
 
             {/* Remember Session */}
@@ -439,19 +484,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
+                gap: '7px',
                 cursor: 'pointer',
                 userSelect: 'none',
-                marginTop: '4px'
+                marginTop: '2px'
               }}
             >
               <input
                 type="checkbox"
                 checked={keepLoggedIn}
                 onChange={() => {}}
-                style={{ accentColor: '#6366F1', width: '16px', height: '16px', cursor: 'pointer' }}
+                style={{ accentColor: '#6366F1', width: '14px', height: '14px', cursor: 'pointer' }}
               />
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                 Keep me logged in on this computer
               </span>
             </div>
@@ -463,58 +508,36 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               className="btn btn-primary"
               style={{
                 width: '100%',
-                padding: '12px',
-                marginTop: '6px',
-                fontSize: '0.92rem',
+                padding: '9px',
+                marginTop: '2px',
+                fontSize: '0.86rem',
                 fontWeight: 700,
-                borderRadius: '12px',
+                borderRadius: '10px',
                 opacity: canSubmitMaster && !isLoading ? 1 : 0.6,
                 cursor: canSubmitMaster && !isLoading ? 'pointer' : 'not-allowed',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 8px 20px rgba(99, 102, 241, 0.3)'
+                gap: '6px',
+                boxShadow: '0 4px 14px rgba(99, 102, 241, 0.25)'
               }}
             >
               {isLoading ? 'Creating Master Profile...' : (
                 <>
-                  <span>Create Master Account & Start CRM</span>
-                  <ArrowRight size={16} />
+                  <span>Create Master Account & Launch</span>
+                  <ArrowRight size={15} />
                 </>
               )}
             </button>
-
-            {/* Switch to Standard Sign In */}
-            <div style={{ textAlign: 'center', marginTop: '10px' }}>
-              <button
-                type="button"
-                onClick={() => {
-                  setErrorMsg(null);
-                  setMode('login');
-                }}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--accent-primary)',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  textDecoration: 'underline'
-                }}
-              >
-                Staff Member or Existing Business? Sign In
-              </button>
-            </div>
           </form>
         )}
 
         {/* -------------------- MODE: UNIFIED SIGN IN (MASTER & STAFF) -------------------- */}
         {mode === 'login' && (
-          <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {/* Username / Staff ID */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.84rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
                 User ID / Username / Staff ID <span style={{ color: '#EF4444' }}>*</span>
               </label>
               <div style={{ position: 'relative' }}>
@@ -528,14 +551,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   autoFocus
                   style={{
                     width: '100%',
-                    paddingLeft: '38px',
-                    paddingRight: '12px',
-                    fontSize: '0.92rem'
+                    paddingLeft: '32px',
+                    paddingRight: '10px',
+                    fontSize: '0.86rem',
+                    paddingTop: '8px',
+                    paddingBottom: '8px'
                   }}
                 />
-                <User size={18} style={{
+                <User size={15} style={{
                   position: 'absolute',
-                  left: '12px',
+                  left: '10px',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   color: 'var(--text-muted)'
@@ -545,27 +570,29 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
             {/* Password / PIN */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.84rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '6px' }}>
-                Password or PIN <span style={{ color: '#EF4444' }}>*</span>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
+                Password or Security PIN <span style={{ color: '#EF4444' }}>*</span>
               </label>
               <div style={{ position: 'relative' }}>
                 <input
                   type={showLoginPassword ? 'text' : 'password'}
                   className="input-field"
-                  placeholder="Enter your security password"
+                  placeholder="Enter password or PIN"
                   value={loginPassword}
                   onChange={e => setLoginPassword(e.target.value)}
                   required
                   style={{
                     width: '100%',
-                    paddingLeft: '38px',
-                    paddingRight: '40px',
-                    fontSize: '0.92rem'
+                    paddingLeft: '32px',
+                    paddingRight: '34px',
+                    fontSize: '0.86rem',
+                    paddingTop: '8px',
+                    paddingBottom: '8px'
                   }}
                 />
-                <Lock size={18} style={{
+                <Lock size={15} style={{
                   position: 'absolute',
-                  left: '12px',
+                  left: '10px',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   color: 'var(--text-muted)'
@@ -575,16 +602,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
                   style={{
                     position: 'absolute',
-                    right: '12px',
+                    right: '10px',
                     top: '50%',
                     transform: 'translateY(-50%)',
                     background: 'transparent',
                     border: 'none',
                     color: 'var(--text-muted)',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    padding: 0
                   }}
                 >
-                  {showLoginPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showLoginPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
             </div>
@@ -595,18 +623,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
+                gap: '7px',
                 cursor: 'pointer',
-                userSelect: 'none'
+                userSelect: 'none',
+                marginTop: '2px'
               }}
             >
               <input
                 type="checkbox"
                 checked={keepLoggedIn}
                 onChange={() => {}}
-                style={{ accentColor: '#6366F1', width: '16px', height: '16px', cursor: 'pointer' }}
+                style={{ accentColor: '#6366F1', width: '14px', height: '14px', cursor: 'pointer' }}
               />
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                 Keep me logged in on this computer
               </span>
             </div>
@@ -618,64 +647,42 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               className="btn btn-primary"
               style={{
                 width: '100%',
-                padding: '13px',
-                fontSize: '0.95rem',
+                padding: '10px',
+                marginTop: '4px',
+                fontSize: '0.88rem',
                 fontWeight: 700,
-                borderRadius: '12px',
+                borderRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)',
+                gap: '6px',
+                boxShadow: '0 4px 16px rgba(99, 102, 241, 0.25)',
                 cursor: isLoading ? 'not-allowed' : 'pointer'
               }}
             >
               {isLoading ? 'Authenticating...' : (
                 <>
                   <span>Sign In to Terminal</span>
-                  <ArrowRight size={18} />
+                  <ArrowRight size={15} />
                 </>
               )}
             </button>
-
-            {/* Switch to Setup / First-Time */}
-            <div style={{ textAlign: 'center', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <button
-                type="button"
-                onClick={() => {
-                  setErrorMsg(null);
-                  setMode('setup');
-                }}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--text-muted)',
-                  fontSize: '0.8rem',
-                  cursor: 'pointer',
-                  textDecoration: 'underline'
-                }}
-              >
-                {!isMasterConfigured ? 'First-Time Setup? Create Master Administrator' : 'Set Up New Business Master Account'}
-              </button>
-            </div>
           </form>
         )}
 
-        {/* Security Footer Notice */}
+        {/* Minimal Unobtrusive Security Badge */}
         <div style={{
-          marginTop: '24px',
-          paddingTop: '16px',
-          borderTop: '1px solid var(--border-color)',
+          marginTop: '16px',
           textAlign: 'center',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '6px',
+          gap: '5px',
           color: 'var(--text-dim)',
-          fontSize: '0.74rem'
+          fontSize: '0.7rem'
         }}>
-          <ShieldCheck size={14} style={{ color: '#10B981' }} />
-          <span>Local Offline Relational Persistence • Role-Based Encryption</span>
+          <ShieldCheck size={12} style={{ color: '#10B981' }} />
+          <span>Encrypted Local Terminal</span>
         </div>
       </div>
     </div>
