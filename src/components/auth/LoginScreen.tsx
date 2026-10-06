@@ -32,7 +32,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   // Master Setup Fields
   const [masterUsername, setMasterUsername] = useState<string>('admin');
   const [masterFullName, setMasterFullName] = useState<string>('');
-  const [businessName, setBusinessName] = useState<string>(() => dbService.getBrandProfile()?.brand_name || '');
+  const [businessName, setBusinessName] = useState<string>('');
   const [masterPassword, setMasterPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showMasterPassword, setShowMasterPassword] = useState<boolean>(false);

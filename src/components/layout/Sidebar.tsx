@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   LayoutDashboard, ShoppingBag, FileText, Package, Users, 
-  DollarSign, Truck, Settings, Lock, Briefcase,
+  DollarSign, Truck, Settings, Lock, Briefcase, LogOut,
   ChevronLeft, ChevronRight
 } from 'lucide-react';
 import type { UserAccount, BrandProfile } from '../../types/crm';
@@ -28,6 +28,7 @@ interface SidebarProps {
   onWidthChange?: (width: number) => void;
   onOpenAbout?: () => void;
   onOpenBrandSettings?: () => void;
+  onLogout?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -43,7 +44,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   width = 256,
   onWidthChange,
   onOpenAbout,
-  onOpenBrandSettings
+  onOpenBrandSettings,
+  onLogout
 }) => {
   const { t } = useLocalization();
   const [hoveredTab, setHoveredTab] = useState<TabType | null>(null);
@@ -547,6 +549,74 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           );
         })}
+
+        {onLogout && (
+          <>
+            {/* Subtle Divider before System Actions */}
+            <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '6px 4px' }} />
+
+            {/* Logout Function Item */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={onLogout}
+                onMouseEnter={() => setHoveredTab('logout' as any)}
+                onMouseLeave={() => setHoveredTab(null)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: isCollapsed ? 'center' : 'flex-start',
+                  gap: '12px',
+                  padding: isCollapsed ? '10px 0' : '9px 12px',
+                  borderRadius: '10px',
+                  border: '1px solid transparent',
+                  backgroundColor: hoveredTab === ('logout' as any) ? 'rgba(239, 68, 68, 0.1)' : 'transparent',
+                  color: hoveredTab === ('logout' as any) ? '#EF4444' : 'var(--text-muted)',
+                  cursor: 'pointer',
+                  fontSize: '0.84rem',
+                  fontWeight: 600,
+                  transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
+                  position: 'relative'
+                }}
+                title={isCollapsed ? 'Log Out / Lock Terminal' : undefined}
+              >
+                <LogOut size={18} style={{ flexShrink: 0, color: hoveredTab === ('logout' as any) ? '#EF4444' : 'var(--text-muted)' }} />
+                {!isCollapsed && (
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    Log Out
+                  </span>
+                )}
+              </button>
+
+              {/* Floating Tooltip in Collapsed Mode */}
+              {isCollapsed && hoveredTab === ('logout' as any) && (
+                <div style={{
+                  position: 'absolute',
+                  left: '68px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  backgroundColor: 'var(--bg-card)',
+                  color: '#EF4444',
+                  padding: '7px 14px',
+                  borderRadius: '8px',
+                  boxShadow: '0 6px 24px rgba(0, 0, 0, 0.4)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  whiteSpace: 'nowrap',
+                  zIndex: 250,
+                  fontSize: '0.84rem',
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  pointerEvents: 'none'
+                }}>
+                  <LogOut size={14} />
+                  <span>Log Out</span>
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </nav>
 
       {/* Offline Ecosystem & Creator Attribution Footer */}

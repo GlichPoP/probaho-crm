@@ -338,6 +338,7 @@ export function App() {
         }}
         onOpenAbout={() => setIsAboutOpen(true)}
         onOpenBrandSettings={handleOpenBrandSettings}
+        onLogout={handleLockSession}
       />
 
       {/* Main Container */}
