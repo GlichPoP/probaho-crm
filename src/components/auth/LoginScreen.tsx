@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Lock, User, Eye, EyeOff, ShieldCheck, ArrowRight, Moon, Sun, 
-  Check, Building2, AlertCircle 
+  Check, Building2, AlertCircle, Info 
 } from 'lucide-react';
 import { ProbahoLogo } from '../layout/ProbahoLogo';
 import { dbService } from '../../database/db';
@@ -214,7 +214,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           </p>
         </div>
 
-        {/* Top Segmented Navigation Tab */}
+        {/* Top Segmented Navigation Tab (Create Master on LEFT, Sign In on RIGHT) */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
@@ -225,6 +225,32 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           marginBottom: '14px',
           border: '1px solid var(--border-color)'
         }}>
+          {/* Tab 1 (Left): Create Master / Master Setup */}
+          <button
+            type="button"
+            onClick={() => { setErrorMsg(null); setMode('setup'); }}
+            style={{
+              padding: '7px 8px',
+              borderRadius: '8px',
+              fontSize: '0.8rem',
+              fontWeight: mode === 'setup' ? 700 : 500,
+              backgroundColor: mode === 'setup' ? 'var(--bg-card)' : 'transparent',
+              color: mode === 'setup' ? 'var(--accent-primary)' : 'var(--text-muted)',
+              border: mode === 'setup' ? '1px solid var(--border-color)' : 'none',
+              boxShadow: mode === 'setup' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <ShieldCheck size={14} />
+            <span>{isMasterConfigured ? 'Master Setup' : 'Create Master'}</span>
+          </button>
+
+          {/* Tab 2 (Right): Staff & User Sign In */}
           <button
             type="button"
             onClick={() => { setErrorMsg(null); setMode('login'); }}
@@ -247,30 +273,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           >
             <User size={14} />
             <span>Sign In</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => { setErrorMsg(null); setMode('setup'); }}
-            style={{
-              padding: '7px 8px',
-              borderRadius: '8px',
-              fontSize: '0.8rem',
-              fontWeight: mode === 'setup' ? 700 : 500,
-              backgroundColor: mode === 'setup' ? 'var(--bg-card)' : 'transparent',
-              color: mode === 'setup' ? 'var(--accent-primary)' : 'var(--text-muted)',
-              border: mode === 'setup' ? '1px solid var(--border-color)' : 'none',
-              boxShadow: mode === 'setup' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease'
-            }}
-          >
-            <ShieldCheck size={14} />
-            <span>{isMasterConfigured ? 'Master Config' : 'Create Master'}</span>
           </button>
         </div>
 
@@ -314,6 +316,25 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
         {/* -------------------- MODE: INITIAL MASTER SETUP -------------------- */}
         {mode === 'setup' && (
           <form onSubmit={handleMasterSetupSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* Informative Guidance Banner for Master vs Staff */}
+            <div style={{
+              padding: '8px 10px',
+              borderRadius: '8px',
+              backgroundColor: 'rgba(99, 102, 241, 0.08)',
+              border: '1px solid rgba(99, 102, 241, 0.2)',
+              fontSize: '0.74rem',
+              color: 'var(--text-muted)',
+              lineHeight: 1.4,
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '7px'
+            }}>
+              <Info size={14} style={{ color: 'var(--accent-primary)', marginTop: '2px', flexShrink: 0 }} />
+              <span>
+                <strong style={{ color: 'var(--text-main)' }}>First-Time Setup:</strong> Creating the Master ID is mandatory to initialize the business operations. If you are a staff member logging in, please switch to <strong>Sign In</strong> on the top right.
+              </span>
+            </div>
+
             {/* Master ID / Username & Full Name in 2 columns */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
@@ -323,7 +344,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="admin"
+                  placeholder="e.g. admin"
                   value={masterUsername}
                   onChange={e => setMasterUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
                   required
@@ -333,12 +354,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
               <div>
                 <label style={{ display: 'block', fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
-                  Full Name <span style={{ color: '#EF4444' }}>*</span>
+                  Master Full Name <span style={{ color: '#EF4444' }}>*</span>
                 </label>
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="Irfanur Rahman"
+                  placeholder="e.g. Business Administrator"
                   value={masterFullName}
                   onChange={e => setMasterFullName(e.target.value)}
                   required
@@ -356,7 +377,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="e.g. Probaho Store"
+                  placeholder="e.g. Enterprise Retail / Showroom Name"
                   value={businessName}
                   onChange={e => setBusinessName(e.target.value)}
                   style={{ width: '100%', paddingLeft: '30px', fontSize: '0.84rem', padding: '7px 10px 7px 30px' }}
@@ -375,7 +396,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   <input
                     type={showMasterPassword ? 'text' : 'password'}
                     className="input-field"
-                    placeholder="Enter password"
+                    placeholder="Create password"
                     value={masterPassword}
                     onChange={e => setMasterPassword(e.target.value)}
                     required
@@ -408,7 +429,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 <input
                   type="password"
                   className="input-field"
-                  placeholder="Re-enter"
+                  placeholder="Confirm password"
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
                   required
@@ -544,7 +565,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="e.g. admin or staff_karim"
+                  placeholder="Enter Username or Staff ID (e.g. admin, STAFF-01)"
                   value={loginIdentifier}
                   onChange={e => setLoginIdentifier(e.target.value)}
                   required
@@ -577,7 +598,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 <input
                   type={showLoginPassword ? 'text' : 'password'}
                   className="input-field"
-                  placeholder="Enter password or PIN"
+                  placeholder="Enter account password or PIN"
                   value={loginPassword}
                   onChange={e => setLoginPassword(e.target.value)}
                   required

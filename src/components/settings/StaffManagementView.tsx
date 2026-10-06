@@ -654,7 +654,7 @@ ${brand} Master Administration`;
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Kashem Ahmed"
+                    placeholder="Enter staff full name"
                     value={newName}
                     onChange={e => setNewName(e.target.value)}
                     style={{
@@ -675,7 +675,7 @@ ${brand} Master Administration`;
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. kashem_pos or staff01"
+                    placeholder="e.g. staff.pos or STAFF-01"
                     value={newUsername}
                     onChange={e => setNewUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
                     style={{
@@ -745,7 +745,7 @@ ${brand} Master Administration`;
                 </div>
                 <input
                   type="text"
-                  placeholder="e.g. 1234 or kashem2026"
+                  placeholder="e.g. 1234 or StaffPass@2026"
                   value={newPin}
                   onChange={e => setNewPin(e.target.value)}
                   style={{
