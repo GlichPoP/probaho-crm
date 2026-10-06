@@ -436,6 +436,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           return (
             <div key={item.id} style={{ position: 'relative' }}>
               <button
+                data-testid={`nav-item-${item.id}`}
                 onClick={() => handleSelect(item.id, item.label)}
                 onMouseEnter={() => setHoveredTab(item.id)}
                 onMouseLeave={() => setHoveredTab(null)}

@@ -28,6 +28,49 @@ Whether processing rapid Cash-on-Delivery (COD) retail orders, generating custom
 
 ---
 
+## 📸 Application Screenshots & User Interface
+
+Experience PROBAHO CRM's modern, responsive design engineered for rapid desktop workflows. Built with native **Light Mode** and **Dark Mode** support for high readability across any showroom or office lighting environment.
+
+<div align="center">
+
+### 1. Executive Command Center & Real-Time Analytics (Light Mode)
+*Comprehensive real-time sales overview, gross margins, courier COD remittances, daily revenue vs. profit trend charts, and sales channel breakdown.*
+
+<img src="docs/screenshots/01-dashboard-light.png" alt="Executive Command Center & Analytics (Light Mode)" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);" />
+
+<br/><br/>
+
+### 2. Orders Management & POS Terminal (Dark Mode)
+*Rapid invoice generation, multi-courier tracking (Pathao, Steadfast, RedX), live delivery status workflow, and COD remittance reconciliation.*
+
+<img src="docs/screenshots/02-pos-orders-dark.png" alt="Orders Management & POS Terminal (Dark Mode)" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);" />
+
+<br/><br/>
+
+### 3. Inventory Catalog & Multi-Variant Warehouse (Light Mode)
+*Complete SKU catalog with multi-variant attributes (Size, Fit, Color/Shade), real-time stock cost valuation, retail margin forecasting, and automated low-stock warnings.*
+
+<img src="docs/screenshots/03-inventory-warehouse-light.png" alt="Inventory Catalog & Warehouse (Light Mode)" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);" />
+
+<br/><br/>
+
+### 4. Financial Accounting Ledger & Cash Flow (Dark Mode)
+*Instant ledger audit trail of all cash inflows, vendor payouts, expense allocations, mobile financial settlements (bKash/Nagad/Bank), and net realized balances.*
+
+<img src="docs/screenshots/04-financial-accounting-dark.png" alt="Financial Accounting Ledger & Cash Flow (Dark Mode)" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);" />
+
+<br/><br/>
+
+### 5. Enterprise Security Terminal & Role-Based Access Control
+*Secure local authentication gateway featuring first-time Master Setup, strong password enforcement, and separate staff sign-in profiles.*
+
+<img src="docs/screenshots/05-login-auth-terminal.png" alt="Enterprise Security Terminal & Auth (Light Mode)" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);" />
+
+</div>
+
+---
+
 ## 🚀 Key Architectural Capabilities
 
 ### 1. Offline-First Relational Engine (SQLite + WebAssembly)
