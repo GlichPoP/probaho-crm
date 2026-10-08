@@ -14,7 +14,7 @@
   <b>A high-performance, offline-first enterprise management suite designed for retail showrooms, e-commerce distributors, and merchant operations.</b>
 </p>
 
-[Download Setup Installer (.exe)](https://github.com/GlichPoP/probaho-crm/releases) • [Download Portable (.exe)](https://github.com/GlichPoP/probaho-crm/releases) • [Report an Issue](https://github.com/GlichPoP/probaho-crm/issues)
+[Download Setup Installer (.exe)](https://github.com/GlichPoP/probaho-crm/releases) • [Download Portable (.exe)](https://github.com/GlichPoP/probaho-crm/releases) • [User Guide (PDF)](https://github.com/GlichPoP/probaho-crm/releases/download/v1.0.0/PROBAHO-CRM-User-Guide.pdf) • [Report an Issue](https://github.com/GlichPoP/probaho-crm/issues)
 
 </div>
 
@@ -127,6 +127,10 @@ Experience PROBAHO CRM's modern, responsive design engineered for rapid desktop 
 ### Option B: Standalone Portable Version
 * Download **`PROBAHO CRM Solutions-Portable.exe`**.
 * Runs directly without installation—ideal for running directly from a USB flash drive across multiple showroom workstations.
+
+### Option C: Complete User Guide Manual (PDF)
+* Download **[`PROBAHO-CRM-User-Guide.pdf`](https://github.com/GlichPoP/probaho-crm/releases/download/v1.0.0/PROBAHO-CRM-User-Guide.pdf)**.
+* Comprehensive step-by-step setup walkthrough covering Master account setup, employee role permissions, POS orders, variant inventory, and connecting free Google Firebase cloud synchronization.
 
 ---
 
